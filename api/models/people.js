@@ -36,22 +36,23 @@ function _manyPeople(neo4jResult) {
 // get a single person by id
 const getById = function (session, id) {
   const query = [
-    'MATCH (person:Person {tmdbId: $id})',
+    'MATCH (person:Person {id: $id})',
     'OPTIONAL MATCH (person)-[:DIRECTED]->(d:Movie)',
     'OPTIONAL MATCH (person)<-[:PRODUCED]->(p:Movie)',
     'OPTIONAL MATCH (person)<-[:WRITER_OF]->(w:Movie)',
     'OPTIONAL MATCH (person)<-[r:ACTED_IN]->(a:Movie)',
     'OPTIONAL MATCH (person)-->(movies)<-[relatedRole:ACTED_IN]-(relatedPerson)',
     'RETURN DISTINCT person,',
-    'collect(DISTINCT { name:d.title, id:d.tmdbId, poster_image:d.poster}) AS directed,',
-    'collect(DISTINCT { name:p.title, id:p.tmdbId, poster_image:p.poster}) AS produced,',
-    'collect(DISTINCT { name:w.title, id:w.tmdbId, poster_image:w.poster}) AS wrote,',
-    'collect(DISTINCT{ name:a.title, id:a.tmdbId, poster_image:a.poster, role:r.role}) AS actedIn,',
-    'collect(DISTINCT{ name:relatedPerson.name, id:relatedPerson.tmdbId, poster_image:relatedPerson.poster, role:relatedRole.role}) AS related'
+    'collect(DISTINCT { name:d.title, id:d.id, poster_image:d.poster_image}) AS directed,',
+    'collect(DISTINCT { name:p.title, id:p.id, poster_image:p.poster_image}) AS produced,',
+    'collect(DISTINCT { name:w.title, id:w.id, poster_image:w.poster_image}) AS wrote,',
+    'collect(DISTINCT{ name:a.title, id:a.id, poster_image:a.poster_image, role:r.role}) AS actedIn,',
+    'collect(DISTINCT{ name:relatedPerson.name, id:relatedPerson.id, poster_image:relatedPerson.poster_image, role:relatedRole.role}) AS related'
   ].join('\n');
 
+  console.log(query);
   return session.readTransaction(txc =>
-      txc.run(query, {id: id})
+      txc.run(query, {id: parseInt(id)})
     ).then(result => {
       if (!_.isEmpty(result.records)) {
         return _singlePersonWithDetails(result.records[0]);

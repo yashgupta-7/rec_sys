@@ -82,20 +82,20 @@ const getById = function (session, movieId, userId) {
     'collect(DISTINCT d) AS directors,',
     'collect(DISTINCT p) AS producers,',
     'collect(DISTINCT w) AS writers,',
-    'collect(DISTINCT{ name:a.name, id:a.tmdbId, poster_image:a.poster, role:r.role}) AS actors,',
+    'collect(DISTINCT{ name:a.name, id:a.id, poster_image:a.poster, role:r.role}) AS actors,',
     'collect(DISTINCT related) AS related,',
     'collect(DISTINCT genre) AS genres',
   ].join('\n');
-  console.log(query, movieId);
+  // console.log(query, movieId);
   //var x = 770;
   return session.readTransaction(txc =>
       txc.run(query, {
         movieId: parseInt(movieId),
-        userId: userId
+        userId: parseInt(userId)
       })
     )
     .then(result => {
-      console.log(result);
+      console.log(result.records[0]['_fields'][0]['properties']);
       if (!_.isEmpty(result.records)) {
         return _singleMovieWithDetails(result.records[0]);
       }
@@ -125,7 +125,7 @@ const getByDateRange = function (session, start, end) {
 // Get by date range
 const getByActor = function (session, id) {
   const query = [
-    'MATCH (actor:Person {tmdbId: $id})-[:ACTED_IN]->(movie:Movie)',
+    'MATCH (actor:Person {id: $id})-[:ACTED_IN]->(movie:Movie)',
     'RETURN DISTINCT movie'
   ].join('\n');
 
@@ -160,7 +160,7 @@ const getByGenre = function(session, genreId) {
 // Get many movies directed by a person
 const getByDirector = function(session, personId) {
   const query = [
-    'MATCH (:Person {tmdbId: $personId})-[:DIRECTED]->(movie:Movie)',
+    'MATCH (:Person {id: $personId})-[:DIRECTED]->(movie:Movie)',
     'RETURN DISTINCT movie'
   ].join('\n');
 
@@ -174,13 +174,13 @@ const getByDirector = function(session, personId) {
 // Get many movies written by a person
 const getByWriter = function(session, personId) {
   const query = [
-    'MATCH (:Person {tmdbId: $personId})-[:WRITER_OF]->(movie:Movie)',
+    'MATCH (:Person {id: $personId})-[:WRITER_OF]->(movie:Movie)',
     'RETURN DISTINCT movie'
   ].join('\n');
 
   return session.readTransaction(txc =>
       txc.run(query, {
-        personId: personId
+        personId: parseInt(personId)
       })
     ).then(result => manyMovies(result));
 };
@@ -188,13 +188,13 @@ const getByWriter = function(session, personId) {
 const rate = function (session, movieId, userId, rating) {
   return session.writeTransaction(txc =>
     txc.run(
-      'MATCH (u:User {id: $userId}),(m:Movie {tmdbId: $movieId}) \
+      'MATCH (u:User {id: $userId}),(m:Movie {id: $movieId}) \
       MERGE (u)-[r:RATED]->(m) \
       SET r.rating = $rating \
       RETURN m',
       {
-        userId: userId,
-        movieId: movieId,
+        userId: parseInt(userId),
+        movieId: parseInt(movieId),
         rating: parseInt(rating)
       }
     )
@@ -204,8 +204,8 @@ const rate = function (session, movieId, userId, rating) {
 const deleteRating = function (session, movieId, userId) {
   return session.writeTransaction(txc =>
     txc.run(
-      'MATCH (u:User {id: $userId})-[r:RATED]->(m:Movie {tmdbId: $movieId}) DELETE r',
-      {userId: userId, movieId: movieId}
+      'MATCH (u:User {id: $userId})-[r:RATED]->(m:Movie {id: $movieId}) DELETE r',
+      {userId: parseInt(userId), movieId: parseInt(movieId)}
     )
   );
 };
@@ -215,7 +215,7 @@ const getRatedByUser = function (session, userId) {
     txc.run(
       'MATCH (:User {id: $userId})-[rated:RATED]->(movie:Movie) \
        RETURN DISTINCT movie, rated.rating as my_rating',
-      {userId: userId}
+      {userId: parseInt(userId)}
     )
   ).then(result => {
     return result.records.map(r => new Movie(r.get('movie'), r.get('my_rating')))
@@ -236,7 +236,7 @@ const getRecommended = function (session, userId) {
       RETURN movie \
       ORDER BY avgRating desc \
       LIMIT 25',
-      {userId: userId}
+      {userId: parseInt(userId)}
     )
   ).then(result => manyMovies(result));
 };
