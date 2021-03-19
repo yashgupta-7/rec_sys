@@ -95,7 +95,7 @@ const getById = function (session, movieId, userId) {
       })
     )
     .then(result => {
-      console.log(result.records[0]['_fields'][0]['properties']);
+      // console.log(result.records[0]);
       if (!_.isEmpty(result.records)) {
         return _singleMovieWithDetails(result.records[0]);
       }
@@ -149,7 +149,7 @@ const getByGenre = function(session, genreId) {
     // 'WHERE toLower(genre.name) = toLower($genreId) OR id(genre) = toInteger($genreId)', // while transitioning to the sandbox data             
     // 'RETURN movie'
   ].join('\n');
-  console.log(query);
+  // console.log(query);
   return session.readTransaction(txc =>
       txc.run(query, {
         genreId: genreId
@@ -186,14 +186,15 @@ const getByWriter = function(session, personId) {
 };
 
 const rate = function (session, movieId, userId, rating) {
+  console.log(movieId, userId, rating);
   return session.writeTransaction(txc =>
     txc.run(
-      'MATCH (u:User {id: $userId}),(m:Movie {id: $movieId}) \
+      'MATCH (u:User {username: $userId}),(m:Movie {id: $movieId}) \
       MERGE (u)-[r:RATED]->(m) \
       SET r.rating = $rating \
       RETURN m',
       {
-        userId: parseInt(userId),
+        userId: userId,
         movieId: parseInt(movieId),
         rating: parseInt(rating)
       }

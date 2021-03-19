@@ -50,7 +50,7 @@ const getById = function (session, id) {
     'collect(DISTINCT{ name:relatedPerson.name, id:relatedPerson.id, poster_image:relatedPerson.poster_image, role:relatedRole.role}) AS related'
   ].join('\n');
 
-  console.log(query);
+  // console.log(query);
   return session.readTransaction(txc =>
       txc.run(query, {id: parseInt(id)})
     ).then(result => {

@@ -316,7 +316,7 @@ exports.rateMovie = function (req, res, next) {
       throw {rating: 'Rating value is invalid', status: 400};
     }
 
-    Movies.rate(dbUtils.getSession(req), req.params.id, req.user.id, rating)
+    Movies.rate(dbUtils.getSession(req), req.params.id, req.user.username, rating)
       .then(response => writeResponse(res, {}))
       .catch(next);
   });

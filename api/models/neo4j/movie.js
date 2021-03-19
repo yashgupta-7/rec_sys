@@ -6,8 +6,8 @@ const Movie = module.exports = function (_node, myRating) {
   _.extend(this, _node.properties);
 
   this.id = this.id;
-  this.poster_image = this.poster;
-  this.tagline = this.plot;
+  this.poster_image = this.poster_image;
+  this.tagline = this.tagline;
 
   if (this.duration) { 
     this.duration = this.duration; //.toNumber();
