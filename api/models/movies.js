@@ -66,7 +66,7 @@ const getAll = function (session) {
 const getById = function (session, movieId, userId) {
   const query = //'MATCH (movie:Movie {id: $Id}) RETURN DISTINCT movie;' 
   [    'MATCH (movie:Movie {id: $movieId})',
-    'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {id: $userId})',
+    'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {username: $userId})',
     'OPTIONAL MATCH (movie)<-[r:ACTED_IN]-(a:Person)',
     'OPTIONAL MATCH (related:Movie)<--(a:Person) WHERE related <> movie',
     'OPTIONAL MATCH (movie)-[:IN_GENRE]->(genre:Genre)',
@@ -91,11 +91,11 @@ const getById = function (session, movieId, userId) {
   return session.readTransaction(txc =>
       txc.run(query, {
         movieId: parseInt(movieId),
-        userId: parseInt(userId)
+        userId: userId
       })
     )
     .then(result => {
-      // console.log(result.records[0]);
+      console.log("RRRRRRRRRRRRRRRRRRRRRRRRR",result.records[0]);
       if (!_.isEmpty(result.records)) {
         return _singleMovieWithDetails(result.records[0]);
       }
@@ -117,6 +117,20 @@ const getByDateRange = function (session, start, end) {
       txc.run(query, {
         start: parseInt(start || 0),
         end: parseInt(end || 0)
+      })
+    )
+    .then(result => manyMovies(result))
+};
+
+// Get in the spotlight
+const getInSpotlight = function (session) {
+  const query = [
+    // 'MATCH (movie:Movie) RETURN movie'
+    'MATCH (m1:Movie), p=()-[r:RATED_MOVIE]->(m2:Movie) where m1.id = m2.id with avg(r.rating) as ar, m1 as movie RETURN movie order by ar desc LIMIT 5'
+  ].join('\n');
+  // console.log(query);
+  return session.readTransaction(txc =>
+      txc.run(query, {
       })
     )
     .then(result => manyMovies(result))
@@ -224,20 +238,52 @@ const getRatedByUser = function (session, userId) {
 };
 
 const getRecommended = function (session, userId) {
+  console.log("CALED", userId);
   return session.readTransaction(txc =>
     txc.run(
-      'MATCH (me:User {id: $userId})-[my:RATED]->(m:Movie) \
-      MATCH (other:User)-[their:RATED]->(m) \
-      WHERE me <> other \
-      AND abs(my.rating - their.rating) < 2 \
-      WITH other,m \
-      MATCH (other)-[otherRating:RATED]->(movie:Movie) \
-      WHERE movie <> m \
-      WITH avg(otherRating.rating) AS avgRating, movie \
-      RETURN movie \
-      ORDER BY avgRating desc \
-      LIMIT 25',
-      {userId: parseInt(userId)}
+      'MATCH (me:User)-[r1:LIKES_GENRE]->(g:Genre)<-[r2:LIKES_GENRE]-(u:User)-[r3:RATED_MOVIE]->(b2:Movie) \
+      WHERE me.username = $userId AND  r3.rating > 3 AND NOT (me)-[:RATED_MOVIE]->(b2) \
+      RETURN distinct b2 AS movie, count(*) AS count \
+      ORDER BY count DESC \
+      LIMIT 10',
+      // 'MATCH (me:User {id: $userId})-[my:RATED]->(m:Movie) \
+      // MATCH (other:User)-[their:RATED]->(m) \
+      // WHERE me <> other \
+      // AND abs(my.rating - their.rating) < 2 \
+      // WITH other,m \
+      // MATCH (other)-[otherRating:RATED]->(movie:Movie) \
+      // WHERE movie <> m \
+      // WITH avg(otherRating.rating) AS avgRating, movie \
+      // RETURN movie \
+      // ORDER BY avgRating desc \
+      // LIMIT 25',
+      {userId: userId}
+    )
+  ).then(result => manyMovies(result));
+};
+
+//
+const getRecoByName = function (session, userId) {
+  console.log("CALEDN", userId);
+  return session.readTransaction(txc =>
+    txc.run(
+      'MATCH (me:User)-[r1:LIKES_GENRE]->(g:Genre)<-[r2:LIKES_GENRE]-(u:User)-[r3:RATED_BOOK]->(b2:Book) \
+      WHERE me.username = $userId AND  r3.rating > 3 AND NOT (me)-[:RATED_BOOK]->(b2) \
+      RETURN distinct b2 AS book, count(*) AS count \
+      ORDER BY count DESC \
+      LIMIT 10',
+      // 'MATCH (me:User {id: $userId})-[my:RATED]->(m:Movie) \
+      // MATCH (other:User)-[their:RATED]->(m) \
+      // WHERE me <> other \
+      // AND abs(my.rating - their.rating) < 2 \
+      // WITH other,m \
+      // MATCH (other)-[otherRating:RATED]->(movie:Movie) \
+      // WHERE movie <> m \
+      // WITH avg(otherRating.rating) AS avgRating, movie \
+      // RETURN movie \
+      // ORDER BY avgRating desc \
+      // LIMIT 25',
+      {userId: userId}
     )
   ).then(result => manyMovies(result));
 };
@@ -245,6 +291,7 @@ const getRecommended = function (session, userId) {
 // export exposed functions
 module.exports = {
   getAll: getAll,
+  getInSpotlight: getInSpotlight,
   getById: getById,
   getByDateRange: getByDateRange,
   getByActor: getByActor,
@@ -254,5 +301,6 @@ module.exports = {
   rate: rate,
   deleteRating: deleteRating,
   getRatedByUser: getRatedByUser,
-  getRecommended: getRecommended
+  getRecommended: getRecommended,
+  getRecoByName: getRecoByName
 };

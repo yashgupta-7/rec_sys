@@ -3,28 +3,32 @@ import {Link} from 'react-router-dom';
 import {logout} from '../redux/actions/AuthActions';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import logoImg from '../assets/logo.png';
+// import logoImg from '../assets/logo.png';
 
 class Header extends React.Component {
   render() {
     var {props} = this;
     var profile = _.get(props, 'profile');
+    var username = _.get(props, 'profile.username');
     var isLoggedIn = !!_.get(props, 'auth.token');
+    // console.log("Header", profile);
+    var isAdmin = username === "admin";
 
     return (
       <nav className="nt-app-header">
-        <div className="nt-app-header-logo">
-          <Link to="/">
+        {/* <div className="nt-app-header-logo"> */}
+          <h3><center>Movie-Book Recommendations App</center></h3>
+          {/* <Link to="/">
             <img src={logoImg} alt="" />
-          </Link>
-        </div>
+          </Link> */}
+        {/* </div> */}
         <ul className="nt-app-header-links">
           <li>
             <a className="nt-app-header-link"
-               href="https://github.com/neo4j-examples/neo4j-movies-template"
+               href="http://localhost:7474/browser/"
                target="_blank"
                rel="noopener noreferrer">
-              GitHub Project
+              {isAdmin ? <h5>Go to Admin Page</h5> : null}
             </a>
           </li>
         </ul>
@@ -32,8 +36,11 @@ class Header extends React.Component {
           <div className="right">
             {
               profile ?
+              <div>
+                <h5 style={{ height: 40 }}> Welcome {profile.username} ! </h5>
                 <div className="nt-app-header-avatar" style={this.getAvatarStyle(profile)}>
                   <Link to="/profile" title={`profile: ${profile.username}`}/>
+                </div>
                 </div>
                 : null
             }

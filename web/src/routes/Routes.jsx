@@ -8,6 +8,9 @@ import Login from '../pages/Login.jsx';
 import Signup from '../pages/Signup.jsx';
 import SignupStatus from '../pages/SignupStatus.jsx';
 import Profile from '../pages/Profile.jsx';
+import {getProfile} from '../redux/actions/ProfileActions';
+import UserSession from '../UserSession';
+// import { bindActionCreators } from 'redux';
 
 export default class Routes extends React.Component {
   render() {

@@ -10,35 +10,47 @@ export default class MoviesApi {
   }
 
   static getMoviesByGenres(genreNames) {
-    return MoviesApi.getGenres()
-      .then(genres => {
-        var movieGenres = _.filter(genres, g => {
-          return genreNames.indexOf(g.name) > -1;
-        });
+    return axios.get(`${apiBaseURL}/movies/recommended`);
+    // return MoviesApi.getGenres()
+    //   .then(genres => {
+    //     var movieGenres = _.filter(genres, g => {
+    //       return genreNames.indexOf(g.name) > -1;
+    //     });
 
-        return Promise.all(
-          movieGenres.map(genre => {
-              return axios.get(`${apiBaseURL}/movies/genre/${genre.id}/`);
-            }
-          ))
-          .then(genreResults => {
-            var result = {};
-            genreResults.forEach((movies, i) => {
-              result[movieGenres[i].name] = movies;
-            });
+    //     return Promise.all(
+    //       movieGenres.map(genre => {
+    //           return axios.get(`${apiBaseURL}/movies/genre/${genre.id}/`);
+    //         }
+    //       ))
+    //       .then(genreResults => {
+    //         var result = {};
+    //         genreResults.forEach((movies, i) => {
+    //           result[movieGenres[i].name] = movies;
+    //         });
 
-            return result;
-          });
-      });
+    //         return result;
+    //       });
+    //   });
   }
 
   // convert this to top 3 most rated movies
   static getFeaturedMovies() {
-    return Promise.all([
-       axios.get(`${apiBaseURL}/movies/770`),
-      // axios.get(`${apiBaseURL}/movies/15292`),
-      // axios.get(`${apiBaseURL}/movies/11398`)
-    ]);
+    return axios.get(`${apiBaseURL}/movies/spotlight`);
+    // return Promise.all([
+    //    axios.get(`${apiBaseURL}/movies/770`),
+    //   // axios.get(`${apiBaseURL}/movies/15292`),
+    //   // axios.get(`${apiBaseURL}/movies/11398`)
+    // ]);
+  }
+
+  // convert this to top 3 most rated movies
+  static getRecos() {
+    return axios.get(`${apiBaseURL}/movies/recommended`);
+    // return Promise.all([
+    //    axios.get(`${apiBaseURL}/movies/770`),
+    //   // axios.get(`${apiBaseURL}/movies/15292`),
+    //   // axios.get(`${apiBaseURL}/movies/11398`)
+    // ]);
   }
 
   static getMovie(id) {

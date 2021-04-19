@@ -30,7 +30,7 @@ class Movie extends React.Component {
 
   render() {
     var {isFetching, movie, rateMovie, deleteMovieRating, profile} = this.props;
-
+    console.log("MOVIEEEEEEEEEEEEEEEE", movie, deleteMovieRating);
     return (
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
@@ -60,7 +60,7 @@ class Movie extends React.Component {
                   {profile ?
                     <div className="nt-box">
                       <p className="nt-box-row nt-movie-rating">
-                        <strong>Your rating: </strong>
+                        <strong>Your rating: {movie.myRating} </strong>
                         <UserRating movieId={movie.id}
                                     savedRating={movie.myRating}
                                     onSubmitRating={rateMovie}
@@ -81,7 +81,7 @@ class Movie extends React.Component {
                       <strong>Duration: </strong><span>{`${movie.duration} mins`}</span>
                     </p>
                     <p className="nt-box-row">
-                      <strong>Genres: </strong>
+                      <strong>Genres:</strong>
                       <span>{this.renderGenre(movie.genres)}</span>
                     </p>
                     <p className="nt-box-row">
@@ -127,7 +127,7 @@ class Movie extends React.Component {
     }
 
     return (
-      <Carousel>
+      <div>
         {
           actors.map(a => {
             return (
@@ -141,7 +141,7 @@ class Movie extends React.Component {
             );
           })
         }
-      </Carousel>);
+      </div>);
   }
 
   renderRelatedMovies(movies) {
@@ -150,7 +150,7 @@ class Movie extends React.Component {
     }
 
     return (
-      <Carousel>
+      <div>
         {
           movies.map(m => {
             return (
@@ -165,10 +165,11 @@ class Movie extends React.Component {
             );
           })
         }
-      </Carousel>);
+      </div>);
   }
 
   renderPeople(people) {
+    // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", people);
     return people.map((p, i) => {
       return (
         <span key={p.id}>
@@ -179,6 +180,7 @@ class Movie extends React.Component {
   }
 
   renderGenre(genres) {
+    // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", genres);
     return genres.map((g, i) => {
       return (<span key={g.id}>
         {g.name}

@@ -16,7 +16,7 @@ export default class UserRating extends React.Component {
     return (
       <span className="nt-user-rating">
         {stars}
-        {
+        {/* {
           savedRating ?
             <button
                onClick={this.onDeleteRatingClick.bind(this, movieId)}
@@ -25,7 +25,7 @@ export default class UserRating extends React.Component {
             </button>
             :
             null
-        }
+        } */}
       </span>
     );
   }
@@ -33,7 +33,7 @@ export default class UserRating extends React.Component {
   renderStar(isEmpty, movieId, rating) {
     return (
       <button key={rating}
-         className="buttonLink nt-user-rating-star"
+         className="buttonLink nt-user-rating-star fa fa-star"
          onClick={this.onRateClick.bind(this, movieId, rating)}>
         {isEmpty ? '\u2606' : '\u2605'}
       </button>);

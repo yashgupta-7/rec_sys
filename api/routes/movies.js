@@ -58,6 +58,30 @@ exports.list = function (req, res, next) {
 
 /**
  * @swagger
+ * /api/v0/movies/spotlight:
+ *   get:
+ *     tags:
+ *     - movies
+ *     description: Find all movies
+ *     summary: Find all movies
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A list of movies
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Movie'
+ */
+ exports.getMoviesInSpotlight = function (req, res, next) {
+  Movies.getInSpotlight(dbUtils.getSession(req))
+    .then(response => writeResponse(res, response))
+    .catch(next);
+};
+
+/**
+ * @swagger
  * /api/v0/movies/{id}:
  *   get:
  *     tags:
@@ -85,7 +109,8 @@ exports.list = function (req, res, next) {
  *         description: movie not found
  */
 exports.findById = function (req, res, next) {
-  Movies.getById(dbUtils.getSession(req), req.params.id, req.user.id)
+  console.log("HI");
+  Movies.getById(dbUtils.getSession(req), req.params.id, req.user.username)
     .then(response => writeResponse(res, response))
     .catch(next);
 };
@@ -425,7 +450,7 @@ exports.findMoviesRatedByMe = function (req, res, next) {
  */
 exports.getRecommendedMovies = function (req, res, next) {
   loginRequired(req, res, () => {
-    Movies.getRecommended(dbUtils.getSession(req), req.user.id)
+    Movies.getRecommended(dbUtils.getSession(req), req.user.username)
       .then(response => writeResponse(res, response, 200))
       .catch(next);
   })

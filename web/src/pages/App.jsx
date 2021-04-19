@@ -15,13 +15,14 @@ import "../styles/main.scss";
 class App extends React.Component {
   componentDidMount() {
     if (UserSession.getToken() && !this.props.profile) {
+      // console.log("BYE2");
       this.props.dispatch(getProfile());
     }
   }
 
   render() {
     var {auth, profile, movie, person} = this.props;
-
+    console.log("HERE", auth);
     return (
       <div className="nt-app">
         <Header auth={auth}
@@ -30,6 +31,10 @@ class App extends React.Component {
                      person={person}/>
         <div className="nt-app-page">
           {this.props.children}
+          {/* {React.cloneElement(this.props.children, { auth={auth}, profile={profile} })}
+          <div>
+            {React.cloneElement(this.props.children, { auth: true })}
+          </div> */}
         </div>
         {/*<Footer />*/}
         <NotificationContainer />

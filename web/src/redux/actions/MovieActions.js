@@ -32,6 +32,10 @@ export function getFeaturedMovies() {
   return {type: Types.MOVIES_FEATURED_GET_REQUEST};
 }
 
+export function getRecos() {
+  return {type: Types.MOVIES_FEATURED_GET_REQUEST};
+}
+
 export function getFeaturedMoviesSuccess(response) {
   return {type: Types.MOVIES_FEATURED_GET_SUCCESS, response};
 }

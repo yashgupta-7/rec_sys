@@ -75,6 +75,8 @@ api.post("/register", routes.users.register);
 api.post("/login", routes.users.login);
 api.get("/users/me", routes.users.me);
 api.get("/movies", routes.movies.list);
+api.get("/movies/spotlight", routes.movies.getMoviesInSpotlight);
+// api.get("/movies/reco/:name", routes.movies.getRecoMoviesByName);
 api.get("/movies/recommended", routes.movies.getRecommendedMovies);
 api.get("/movies/rated", routes.movies.findMoviesRatedByMe);
 api.get("/movies/:id", routes.movies.findById);

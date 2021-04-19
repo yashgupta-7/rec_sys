@@ -17,7 +17,7 @@ class Profile extends React.Component {
   render() {
     var {profile, ratedMovies, recommendedMovies} = this.props.profile;
     var {profileRateMovie, profileDeleteMovieRating} = this.props;
-
+    console.log("HEHEHEHE", recommendedMovies);
     if (!profile) {
       return null;
     }
@@ -93,7 +93,8 @@ class Profile extends React.Component {
               </div>
               {
                 !_.isEmpty(recommendedMovies) ?
-                  <Carousel>
+                  // <Carousel>
+                  <div>
                     {recommendedMovies.map(m => {
                       return (
                         <div key={m.id}>
@@ -106,7 +107,8 @@ class Profile extends React.Component {
                         </div>
                       );
                     })}
-                  </Carousel>
+                    </div>
+                  // </Carousel>
                   :
                   null
               }
