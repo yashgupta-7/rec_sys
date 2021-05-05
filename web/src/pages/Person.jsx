@@ -77,7 +77,7 @@ class Person extends React.Component {
 
   renderRelatedPeople(actors) {
     return (
-      <Carousel>
+      <div>
         {
           actors.map(a => {
             return (
@@ -91,7 +91,7 @@ class Person extends React.Component {
             );
           })
         }
-        </Carousel>
+        </div>
     );
   }
 
@@ -111,7 +111,7 @@ class Person extends React.Component {
             <div className="nt-box-title">
               {sectionTitle}
             </div>
-            <Carousel>
+            <div>
               {
                 movies.map(m => {
                   return (
@@ -128,7 +128,7 @@ class Person extends React.Component {
                   );
                 })
               }
-            </Carousel>
+            </div>
           </div>
         </div>
       </div>

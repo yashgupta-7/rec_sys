@@ -228,9 +228,9 @@ const deleteRating = function (session, movieId, userId) {
 const getRatedByUser = function (session, userId) {
   return session.readTransaction(txc =>
     txc.run(
-      'MATCH (:User {id: $userId})-[rated:RATED]->(movie:Movie) \
+      'MATCH (:User {username: $userId})-[rated:RATED]->(movie:Movie) \
        RETURN DISTINCT movie, rated.rating as my_rating',
-      {userId: parseInt(userId)}
+      {userId: userId}
     )
   ).then(result => {
     return result.records.map(r => new Movie(r.get('movie'), r.get('my_rating')))

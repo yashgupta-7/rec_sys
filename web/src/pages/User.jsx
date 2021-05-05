@@ -8,8 +8,10 @@ import {bindActionCreators} from 'redux';
 import _ from 'lodash';
 import * as ProfileActions from '../redux/actions/ProfileActions';
 
-class Profile extends React.Component {
+class User extends React.Component {
   componentDidMount() {
+    var {username} = this.props.match.params;
+    console.log("FSHBDF", username);
     this.props.getProfileRatings();
     this.props.getProfileRecommendations();
   }
@@ -130,6 +132,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(ProfileActions, dispatch);
 }
 
-Profile.displayName = 'Profile';
+User.displayName = 'User';
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatedPage(Profile));
+export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatedPage(User));

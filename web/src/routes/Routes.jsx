@@ -7,6 +7,7 @@ import Person from '../pages/Person.jsx';
 import Login from '../pages/Login.jsx';
 import Signup from '../pages/Signup.jsx';
 import SignupStatus from '../pages/SignupStatus.jsx';
+import User from '../pages/User.jsx'
 import Profile from '../pages/Profile.jsx';
 import {getProfile} from '../redux/actions/ProfileActions';
 import UserSession from '../UserSession';
@@ -23,6 +24,7 @@ export default class Routes extends React.Component {
         <Route path="/signup" component={Signup}/>
         <Route path="/signup-status" component={SignupStatus}/>
         <Route path="/profile" component={Profile}/>
+        <Route path="/user/:username" component={User}/>
       </App>
     );
   }

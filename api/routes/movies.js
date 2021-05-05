@@ -416,7 +416,7 @@ exports.deleteMovieRating = function (req, res, next) {
  */
 exports.findMoviesRatedByMe = function (req, res, next) {
   loginRequired(req, res, () => {
-    Movies.getRatedByUser(dbUtils.getSession(req), req.user.id)
+    Movies.getRatedByUser(dbUtils.getSession(req), req.user.username)
       .then(response => writeResponse(res, response, 200))
       .catch(next);
   })
