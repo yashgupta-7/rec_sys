@@ -145,3 +145,44 @@ exports.me = function (req, res, next) {
       .catch(next);
   })
 };
+
+
+/**
+ * @swagger
+ * /api/v0/search_movie:
+ *   post:
+ *     tags:
+ *     - users
+ *     description: search_movie
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         type: object
+ *         schema:
+ *           properties:
+ *             movie_name:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: succesful search
+ *         schema:
+ *           properties:
+ *             token:
+ *               type: string
+ *       400:
+ *         description: invalid credentials
+ */
+ exports.search_movie = function (req, res, next) {
+  const movie_name = _.get(req.body, 'movie_name');
+
+  if (!movie_name) {
+    throw {movie_name: 'This field is required.', status: 400};
+  }
+ 
+
+  Users.search_movie(dbUtils.getSession(req), movie_name)
+    .then(response => writeResponse(res, response))
+    .catch(next);
+};

@@ -95,7 +95,7 @@ const getById = function (session, movieId, userId) {
       })
     )
     .then(result => {
-      console.log("RRRRRRRRRRRRRRRRRRRRRRRRR",result.records[0]);
+      console.log("rrrrrrrrrrrrrrrr",result.records[0]);
       if (!_.isEmpty(result.records)) {
         return _singleMovieWithDetails(result.records[0]);
       }
@@ -152,21 +152,19 @@ const getByActor = function (session, id) {
 
 // get a movie by genre
 const getByGenre = function(session, genreId) {
-  const query = [
-    'MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)',
-    'WHERE id(genre) = toInteger($genreId)',
-    'RETURN movie;'
+  console.log("genreeeeeeeeeeeee");
+  const query =
+    'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE id(genre) = 1146 RETURN movie;';
 //     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
 // WHERE genre.name = 'Action'
 // RETURN movie;
     // 'MATCH (movie:Movie)-[:IN_GENRE]->(genre)',
     // 'WHERE toLower(genre.name) = toLower($genreId) OR id(genre) = toInteger($genreId)', // while transitioning to the sandbox data             
     // 'RETURN movie'
-  ].join('\n');
   // console.log(query);
   return session.readTransaction(txc =>
       txc.run(query, {
-        genreId: genreId
+        genreId: parseInt(genreId)
       })
     ).then(result => manyMovies(result));
 };

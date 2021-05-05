@@ -144,7 +144,7 @@ exports.findById = function (req, res, next) {
 exports.findByGenre = function (req, res, next) {
   const id = req.params.id;
   if (!id) throw {message: 'Invalid id', status: 400};
-
+  console.log("routes genreee", id);
   Movies.getByGenre(dbUtils.getSession(req), id)
     .then(response => writeResponse(res, response))
     .catch(next);

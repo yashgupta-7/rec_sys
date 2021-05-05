@@ -79,3 +79,6 @@ export function deleteMovieRatingSuccess() {
 export function deleteMovieRatingFailure() {
   return {type: Types.MOVIE_DELETE_RATING_FAILURE};
 }
+
+
+

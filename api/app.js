@@ -73,6 +73,7 @@ api.use(neo4jSessionCleanup);
 //api routes
 api.post("/register", routes.users.register);
 api.post("/login", routes.users.login);
+api.post("/", routes.users.search_movie);
 api.get("/users/me", routes.users.me);
 api.get("/movies", routes.movies.list);
 api.get("/movies/spotlight", routes.movies.getMoviesInSpotlight);

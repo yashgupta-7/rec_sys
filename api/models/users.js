@@ -69,3 +69,23 @@ module.exports = {
   me: me,
   login: login
 };
+
+
+const search_movie = function (session, username, password) {
+  // return axios.get(`${apiBaseURL}/movies/770`);
+  return session.readTransaction(txc => txc.run('MATCH (user:User {username: $username}) RETURN user', {username: username}))
+    .then(results => {
+        if (_.isEmpty(results.records)) {
+          throw {username: 'username does not exist', status: 400}
+        }
+        else {
+          const dbUser = _.get(results.records[0].get('user'), 'properties');
+          if (dbUser.password != hashPassword(username, password)) {
+            throw {password: 'wrong password', status: 400}
+          }
+          // return {token: _.get(dbUser, 'api_key')};
+          
+        }
+      }
+    );
+};

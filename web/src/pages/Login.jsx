@@ -27,7 +27,9 @@ class Login extends React.Component {
   }
 
   login(e) {
+    console.log("login function in login.jsx");
     e.preventDefault();
+    
 
     if (this.props.isComponentValid()) {
       this.props.login(this.state.username, this.state.password);
@@ -130,6 +132,7 @@ Login.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
+  console.log("11");
   return bindActionCreators(Actions, dispatch);
 }
 

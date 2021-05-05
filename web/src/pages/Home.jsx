@@ -3,10 +3,16 @@ import { Link } from 'react-router-dom';
 import Loading from '../components/Loading.jsx';
 // import Carousel from '../components/Carousel.jsx';
 import _ from 'lodash';
+import InputValidator from '../components/validation/InputValidator.jsx';
 
 import * as MovieActions from '../redux/actions/MovieActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import axios from '../api/axios';
+import settings from '../config/settings';
+
+
+const {apiBaseURL} = settings;
 // import * as ProfileActions from '../redux/actions/ProfileActions';
 
 // import { FormGroup, FormControl, InputGroup, Glyphicon } from 'react-bootstrap';
@@ -14,9 +20,26 @@ import { connect } from 'react-redux';
 class Home extends React.Component {
   constructor() {
     super();
-
+    
     this.renderFeatured = this.renderFeatured.bind(this);
     this.renderByGenre = this.renderByGenre.bind(this);
+    this.search_movie = this.search_movie.bind(this);
+    this.handleChange_movie = this.handleChange_movie.bind(this);
+    this.handleChange_genre = this.handleChange_genre.bind(this);
+    this.state = {
+      movie_name: '',
+      genre_name: '',
+     
+    };
+  }
+
+  search_movie(e) {
+    e.preventDefault();
+    console.log("search movie in home.jsx");
+    // return axios.get(`${apiBaseURL}/movies/770`);
+    // if (this.props.isComponentValid()) {
+      this.props.search_movie(this.state.movie_name);
+    // }
   }
 
   componentWillMount() {
@@ -62,10 +85,11 @@ class Home extends React.Component {
         </div>
     );
   }
+ 
 
   renderFeatured() {
     // var {movies} = this.props;
-    var {movies, auth, profile} = this.props;
+    var {movies, auth, profile, movie_name, genre_name} = this.props;
     var {props} = this;
     var profile = _.get(props, 'profile');
     var name = _.get(props, 'profile.username');
@@ -76,15 +100,33 @@ class Home extends React.Component {
       <div className="nt-home-featured">
       {isLoggedIn ?
       <div>
-      <div class="input-group">
-        <input type="search" class="form-control rounded" placeholder="Search by Name" aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" class="btn btn-outline-primary">Search by Name</button>
-      </div>
+      <div className="row">      
+                <input name = "search_by_name"
+                type="text"
+                       placeholder="Search by movie name*"
+                       required
+                       value={movie_name}
+                       onChange={this.handleChange_movie}
+                       />
+              </div>
+              <div>
+                  <Link to={`/movie/${this.state.movie_name}`} className="button ba-default-btn">Search by Name</Link>
+                </div>
 
-      <div class="input-group">
-      <input type="search" class="form-control rounded" placeholder="Search by Genre" aria-label="Search" aria-describedby="search-addon" />
-      <button type="button" class="btn btn-outline-primary">Search by Genre</button>
-      </div>
+                <div className="row">      
+                <input name = "search_by_genre"
+                type="text"
+                       placeholder="Search by genre*"
+                       required
+                       value={genre_name}
+                       onChange={this.handleChange_genre}
+                       />
+              </div>
+              <div>
+                  <Link to={`/movie/${this.state.genre_name}`} className="button ba-default-btn">Search by Genre</Link>
+                </div>
+            
+     
       </div>
       : null }
 
@@ -105,8 +147,14 @@ class Home extends React.Component {
           })}
         </ul>
       </div>
+      
     );
   }
+  handleChange_movie(event) {
+    this.setState({movie_name: event.target.value});}
+
+    handleChange_genre(event) {
+      this.setState({genre_name: event.target.value});}
 
   renderByGenre(name) {
     var {movies} = this.props;
@@ -153,6 +201,7 @@ function mapStateToProps(state) {
     movies: state.movies,
     auth: state.auth,
     profile: _.get(state.profile, 'profile', null)
+    // movie_name : ''
   };
 }
 
