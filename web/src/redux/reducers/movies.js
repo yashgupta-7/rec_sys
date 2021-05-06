@@ -7,7 +7,8 @@ const initialState = {
   featured: [],
   byGenre: {},
   detail: null,
-  detailg: "hello"
+  detailg: "hello",
+  detailu: "detailu"
 };
 
 export default function movies(state = initialState, action) {
@@ -48,6 +49,11 @@ export default function movies(state = initialState, action) {
           ...state,
           isFetching: true
         };
+    case Types.FRIEND_DETAIL_GET_REQUEST:
+          return  {
+            ...state,
+            isFetching: true
+          };
     case Types.MOVIE_DETAIL_GET_SUCCESS:
       return  {
         ...state,
@@ -60,6 +66,12 @@ export default function movies(state = initialState, action) {
         isFetching: false,
         detailg: action.response
       };
+      case Types.FRIEND_DETAIL_GET_SUCCESS:
+        return  {
+          ...state,
+          isFetching: false,
+          detailu: action.response
+        };
     case Types.MOVIE_DETAIL_CLEAR:
       return  {
         ...state,

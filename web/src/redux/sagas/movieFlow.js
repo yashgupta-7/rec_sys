@@ -10,6 +10,7 @@ export default function* movieFlow() {
     takeEvery(Types.MOVIES_FEATURED_GET_REQUEST, getFeaturedMovies),
     takeEvery(Types.MOVIE_DETAIL_GET_REQUEST, getMovie),
     takeEvery(Types.GENRE_DETAIL_GET_REQUEST, getGenre),
+    takeEvery(Types.FRIEND_DETAIL_GET_REQUEST, getFriends),
     takeEvery(Types.MOVIE_RATE, rateMovie),
     takeEvery(Types.MOVIE_DELETE_RATING, deleteRating),
   ]);
@@ -67,6 +68,18 @@ function* getGenre(action) {
     yield put(Actions.getGenreFailure(error));
   }
 }
+
+function* getFriends(action) {
+  var {id} = action;
+  try {
+    const response = yield call(MoviesApi.getFriends, id);
+    yield put(Actions.getFriendsSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getFriendsFailure(error));
+  }
+}
+
 
 function* rateMovie(action) {
   var {id, rating} = action;

@@ -11,6 +11,7 @@ const User = module.exports = function (_node) {
     'username': username,
     'avatar': {
       'full_size': 'https://www.gravatar.com/avatar/' + md5(username) + '?d=retro'
-    }
+    },
+    'full_size': 'https://www.gravatar.com/avatar/' + md5(username) + '?d=retro'
   });
 };

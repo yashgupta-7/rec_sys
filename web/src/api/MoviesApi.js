@@ -61,6 +61,14 @@ export default class MoviesApi {
     // console.log("NEWW",id);
     return axios.get(`${apiBaseURL}/genres/${id}`);
 }
+  static getFriends(id) {
+    return axios.get(`${apiBaseURL}/friends/${id}`);
+  // return Promise.all([
+  //    axios.get(`${apiBaseURL}/movies/770`),
+  //   // axios.get(`${apiBaseURL}/movies/15292`),
+  //   // axios.get(`${apiBaseURL}/movies/11398`)
+  // ]);
+  }
 
   static rateMovie(id, rating) {
     return axios.post(`${apiBaseURL}/movies/${id}/rate`, {rating});

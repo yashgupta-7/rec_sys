@@ -23,12 +23,18 @@ const Friends = require('../models/friends')
 
 /**
  * @swagger
- * /api/v0/friends/spotlight:
+ * /api/v0/friends/{id}}:
  *   get:
  *     tags:
  *     - friends
  *     description: Find some users
  *     summary: Find some users
+ *     parameters:
+ *       - name: id
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: string
  *     produces:
  *       - application/json
  *     responses:
@@ -39,8 +45,9 @@ const Friends = require('../models/friends')
  *           items:
  *             $ref: '#/definitions/Friend'
  */
- exports.getFriendsInSpotlight = function (req, res, next) {
-  Friends.getInSpotlight(dbUtils.getSession(req))
+ exports.getFriendsById = function (req, res, next) {
+  const id = req.params.id;
+  Friends.getFriendsById(dbUtils.getSession(req), id)
     .then(response => writeResponse(res, response))
     .catch(next);
 };
