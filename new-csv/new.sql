@@ -86,5 +86,5 @@ MATCH (u:User {id:line.user_id, username:line.user_username}), (g:Genre {id: toI
 CREATE (u)-[r:LIKES_GENRE]->(m);
 
 LOAD CSV WITH HEADERS FROM 'file:///following.csv' AS line
-MATCH (u1:User {id:line.user_id1}), (u2:User {id:line.user_id2})
+MATCH (u1:User {id:line.`:START_ID(User)`}), (u2:User {id:line.`:END_ID(User)`})
 CREATE (u1)-[r:FOLLOWING]->(u2);
