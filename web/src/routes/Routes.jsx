@@ -27,7 +27,7 @@ export default class Routes extends React.Component {
         <Route path="/signup" component={Signup}/>
         <Route path="/signup-status" component={SignupStatus}/>
         <Route path="/profile" component={Profile}/>
-        <Route path="/user/:username" component={User}/>
+        <Route path="/user/:username/:myname" component={User}/>
       </App>
     );
   }

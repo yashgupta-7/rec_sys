@@ -32,28 +32,41 @@ const User = require('../models/neo4j/user');
     // console.log(result['friends'][0]);
     return result;
   }
+
+  // function constreturn(neo4jResult) {
+  //   const result = {};
+  //   result.c = neo4jResult.records.map(r => new User(r.get('user'))));
+  //   return result;
+  // }
 // Get in the spotlight
 const getFriendsById = function (session, id) {
-    const query = 'MATCH (user:User), (user)-[r:RATED_MOVIE]->(m:Movie) RETURN user, r, m LIMIT 5';
-    // console.log(query);
+    const query = 'MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User), (user2)-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
+    console.log(query);
     return session.readTransaction(txc =>
         txc.run(query, {
+          id : id
         })
       )
       .then(result => manyUsers(result))
   };
 
   const changeFriends = function (session, us1, us2, f) {
-    if (f){
-      const query = 'MATCH (u1: User{username: $us1}), (u2: User{username: $us2})' + 
-                    'CREATE (u1)-[f:FOLLOWING]->(u2)';
+    var query=""
+    if (f==1){
+      // console.log("Hey22",query,us1,us2,f);
+       query = 'MATCH (u1: User{username: $us1}), (u2: User{username: $us2}) where $us1<>$us2 ' + 
+                    'CREATE (u1)-[f:FOLLOWING]->(u2) CREATE (u2)-[f2:FOLLOWING]->(u1)';
+      console.log("Hey_if",query,us1,us2,f);
     }
     else{
-      const query = 'MATCH (u1: User{username: $us1})-[f:FOLLOWING]->(u2: User{username: $us2})' + 
-                    'DELETE f';
+      
+       query = 'MATCH (u1: User)-[f:FOLLOWING]->(u2: User) ' + 
+                    'where (u1.username=$us1 and u2.username=$us2) or (u1.username=$us2 and u2.username=$us1) '+
+                     'DELETE f';
+      console.log("Hey_else",query,us1,us2,f);
     }
-    // console.log(query);
-    return session.readTransaction(txc =>
+    // console.log(query,us1,us2,f);
+    return session.writeTransaction(txc =>
         txc.run(query, {
           us1: us1,
           us2: us2
@@ -62,9 +75,23 @@ const getFriendsById = function (session, id) {
       // .then(result => manyUsers(result))
   };
 
+  const findIfFriend = function (session, us1, us2) {
+    const query= 'MATCH p=(u1: User{username : $us1})-[r:FOLLOWING]->(u2: User{username : $us2}) RETURN count(r) as c'
+    console.log(query,us1,us2);
+    return session.readTransaction(txc =>
+        txc.run(query, {
+          us1: us1,
+          us2: us2
+        })
+      ).then(result => {
+        return result.records.map(r => r.get('c'))
+       });
+  };
+
 // export exposed functions
 module.exports = {
   getFriendsById: getFriendsById,
-  changeFriends: changeFriends
+  changeFriends: changeFriends,
+  findIfFriend: findIfFriend
 };
 

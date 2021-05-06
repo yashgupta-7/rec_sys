@@ -70,6 +70,19 @@ export default class MoviesApi {
   // ]);
   }
 
+  static getFollowCheck(u1,u2) {
+    return axios.get(`${apiBaseURL}/friends/${u1}/${u2}`);
+  } 
+
+  static getFollow(u1,u2,f) {
+    return axios.get(`${apiBaseURL}/friends/${u1}/${u2}/${f}`);
+  // return Promise.all([
+  //    axios.get(`${apiBaseURL}/movies/770`),
+  //   // axios.get(`${apiBaseURL}/movies/15292`),
+  //   // axios.get(`${apiBaseURL}/movies/11398`)
+  // ]);
+  }
+
   static rateMovie(id, rating) {
     return axios.post(`${apiBaseURL}/movies/${id}/rate`, {rating});
   }

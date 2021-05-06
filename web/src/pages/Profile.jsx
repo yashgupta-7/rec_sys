@@ -136,7 +136,7 @@ class Profile extends React.Component {
                        value={username}
                        onChange={this.handleChange_username}
                        />
-                 <Link to={`/user/${this.state.username}`} className="button ba-default-btn">Search by UserName</Link>
+                 <Link to={`/user/${this.state.username}/${profile.username}`} className="button ba-default-btn">Search by UserName</Link>
           </div>
        
       </div>

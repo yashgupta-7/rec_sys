@@ -8,7 +8,8 @@ const initialState = {
   byGenre: {},
   detail: null,
   detailg: "hello",
-  detailu: "detailu"
+  detailu: "detailu",
+  isFollow: "default_follow"
 };
 
 export default function movies(state = initialState, action) {
@@ -76,6 +77,27 @@ export default function movies(state = initialState, action) {
       return  {
         ...state,
         detail: null
+      };
+      case Types.FOLLOW_DETAIL_GET_REQUEST:
+        return  {
+          ...state,
+          isFetching: true
+        };
+    case Types.FOLLOWCHECK_DETAIL_GET_REQUEST:
+          return  {
+            ...state,
+            isFetching: true
+          };
+    case Types.FOLLOW_DETAIL_GET_SUCCESS:
+      return  {
+        ...state,
+        isFetching: false
+      };
+    case Types.FOLLOWCHECK_DETAIL_GET_SUCCESS:
+      return  {
+        ...state,
+        isFetching: false,
+        isFollow: action.response
       };
     default:
       return state;

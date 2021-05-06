@@ -11,6 +11,13 @@ export function clearGenre() {
 export function clearFriends() {
   return {type: Types.FRIEND_DETAIL_CLEAR};
 }
+export function clearFollow() {
+  return {type: Types.FOLLOW_DETAIL_CLEAR};
+}
+export function clearFollowCheck() {
+  return {type: Types.FOLLOWCHECK_DETAIL_CLEAR};
+}
+
 
 export function getGenres() {
   return {type: Types.MOVIE_GENRES_GET_REQUEST};
@@ -63,6 +70,12 @@ export function getGenre(id) {
 export function getFriends(id) {
   return {type: Types.FRIEND_DETAIL_GET_REQUEST, id};
 }
+export function getFollow(u1,u2,f) {
+  return {type: Types.FOLLOW_DETAIL_GET_REQUEST, u1,u2,f};
+}
+export function getFollowCheck(u1,u2) {
+  return {type: Types.FOLLOWCHECK_DETAIL_GET_REQUEST, u1,u2};
+}
 
 export function getMovieSuccess(response) {
   return {type: Types.MOVIE_DETAIL_GET_SUCCESS, response};
@@ -74,6 +87,12 @@ export function getGenreSuccess(response) {
 
 export function getFriendsSuccess(response) {
   return {type: Types.FRIEND_DETAIL_GET_SUCCESS, response};
+}
+export function getFollowSuccess(response) {
+  return {type: Types.FOLLOW_DETAIL_GET_SUCCESS, response};
+}
+export function getFollowCheckSuccess(response) {
+  return {type: Types.FOLLOWCHECK_DETAIL_GET_SUCCESS, response};
 }
 
 export function getMovieFailure(error) {

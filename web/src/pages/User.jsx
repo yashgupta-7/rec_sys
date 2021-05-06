@@ -8,12 +8,54 @@ import {Link} from 'react-router-dom';
 import * as MovieActions from '../redux/actions/MovieActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
+import {getProfile} from '../redux/actions/ProfileActions';
 
 class User extends React.Component {
+  constructor() {
+    super();
+    
+    this.change_Follow = this.change_Follow.bind(this);
+    // this.call_getFollowCheck=this.call_getFollowCheck.bind(this);
+    // this.getFollow = this.getFollow.bind(this);
+    // this.getFollowCheck = this.getFollowCheck(this);
+    this.state = {
+      doesFollow : 0,
+      reload : "sf",
+      // myname: '',
+      // genre_name: '',
+     
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    // if (this.props.doesFollow != nextProps.cost) {
+      this.setState({
+        reload: "hey"
+      }
+      );
+    // }
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    //  if(nextProps.cost !== this.props.cost){
+         return true;
+    //  }
+    //  return false;
+  }
   componentDidMount() {
-    var {username} = this.props.match.params;
+    var {username,myname} = this.props.match.params;
+    console.log("params",username,myname)
+    var {profile, ratedMovies, recommendedMovies} = this.props.profile;
+    console.log("my sweet profile mount",profile);
+    var {props} = this;
+    // this.props.dispatch(getProfile());
+    var prof=getProfile();
+    
+    console.log("GET RPFGOILE FUNC",prof);
+    // var profile = _.get(props, 'profile');
+    var myname = _.get(props, 'profile.username');
     this.props.getFriends(username);
+    console.log("did mount",username,myname,this.props.profile);
+    // this.props.getFollowCheck(username,myname);
   }
 
   componentDidUpdate(prevProps) {
@@ -21,7 +63,11 @@ class User extends React.Component {
       this.props.clearFriends();
 
       var {username} = this.props.match.params;
+      var {props} = this;
+      // var profile = _.get(props, 'profile');
+      var myname = _.get(props, 'profile.username');
       this.props.getFriends(username);
+      // this.props.getFollowCheck(username,myname);
     }
   }
 
@@ -33,12 +79,49 @@ class User extends React.Component {
     ;}
 
   render() {
-    var {isFetching, movie, rateMovie, deleteMovieRating, profile, userd} = this.props;
+    setTimeout(() => {
+      this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
+      console.log("setTimeout setState");
+      this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
+    }, 10)
+    var {username,myname} = this.props.match.params;
+    var {profile, ratedMovies, recommendedMovies} = this.props.profile;
+    console.log("my sweet profile",profile);
+    var {isFetching, movie, rateMovie, deleteMovieRating, userd,isFollow} = this.props;
+    console.log("fdjkgh",userd['friends']);
+    var f=false;
+    for(var i in userd['friends']){
+      console.log(userd['friends'][i]);
+
+        if(userd['friends'][i]['username']==myname)
+          f=true;
+    }
+    this.state.doesFollow=f ? 0 : 1 ;
+    // console.log("valu")
+    console.log("IsFollow value",isFollow,profile,f,this.state.doesFollow);
+    // var text_disp = isFollow==="0" ? ""
     console.log("MOVIEEEEEEEEEEEEEEEE", this.props.match.params.username, userd, movie, deleteMovieRating);
+    if (!profile) {
+      return null;
+    }
+    
     return (
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
+        {/* {this.call_getFollowCheck();} */}
         <div className="nt-box">
+        <div className="row text-center">
+              <button className="btn"
+                      type="submit"
+                      name="submit-login"
+                      onClick={this.change_Follow}
+                      // disabled={!canSubmit}
+                      >
+                {f ? <h5>UnFollow </h5> :<h5>Follow </h5>}
+              </button>
+        </div>
+
+
           <div>
             Friends
           </div>
@@ -49,7 +132,7 @@ class User extends React.Component {
               // key={f.id}
               <li > 
                 <div className="nt-box">
-                <Link to={`/user/${f.username}`}>
+                <Link to={`/user/${f.username}/${myname}`}>
                   <img src={f.fullSize} alt="" />
                   <h5>
                     {f.username}
@@ -249,6 +332,51 @@ class User extends React.Component {
       </span>);
     });
   }
+
+  change_Follow(event) {
+    var {isFetching, movie, rateMovie, deleteMovieRating, userd,isFollow} = this.props;
+    console.log("fdjkgh",userd['friends']);
+    var f=false;
+    for(var i in userd['friends']){
+      console.log(userd['friends'][i]);
+
+        if(userd['friends'][i]['username']==myname)
+          f=true;
+    }
+
+    var {profile, ratedMovies, recommendedMovies} = this.props.profile;
+    console.log("Click function",profile);
+    
+    var {username} = this.props.match.params;
+    // var {props} = this;
+    var myname = profile.username;
+    
+    console.log("follow button paramssssss",this.props.isFollow,myname,username);
+    // this.props.getFollowCheck(username,myname);
+    var flag= f ? 0 : 1 ;
+
+    this.props.getFollow(myname,username,this.state.doesFollow);
+    console.log("follow button afterwards",this.props.isFollow[0],flag);
+    setTimeout(() => {
+      this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
+      console.log("setTimeout setState");
+      this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
+    }, 10)
+    this.setState({reload : "rell"});
+
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+  }
 }
 User.displayName = 'User';
 
@@ -256,8 +384,10 @@ function mapStateToProps(state) {
   return {
     movie: state.movies.detail,
     userd: state.movies.detailu,
+    isFollow: state.movies.isFollow,
     isFetching: state.movies.isFetching,
-    profile: _.get(state, 'profile.profile')
+    auth: state.auth,
+    profile: _.get(state, 'profile'),
   };
 }
 

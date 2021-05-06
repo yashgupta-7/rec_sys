@@ -23,7 +23,7 @@ const Friends = require('../models/friends')
 
 /**
  * @swagger
- * /api/v0/friends/{id}}:
+ * /api/v0/friends/{id}:
  *   get:
  *     tags:
  *     - friends
@@ -51,4 +51,90 @@ const Friends = require('../models/friends')
     .then(response => writeResponse(res, response))
     .catch(next);
 };
+
+
+
+/**
+ * @swagger
+ * /api/v0/friends/{u1}/{u2}/{f}:
+ *   get:
+ *     tags:
+ *     - friends
+ *     description: Find users friends
+ *     summary: Find users friends
+ *     parameters:
+ *       - name: u1
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name : u2
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name : f
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Friend'
+ */
+ exports.changeFriends = function (req, res, next) {
+    const u1 = req.params.u1;
+    const u2 = req.params.u2;
+    const f = req.params.f;
+    Friends.changeFriends(dbUtils.getSession(req), u1,u2,f)
+      .then(response => writeResponse(res, response))
+      .catch(next);
+  };
+
+
+
+/**
+ * @swagger
+ * /api/v0/friends/{u1}/{u2}:
+ *   get:
+ *     tags:
+ *     - friends
+ *     description: Find users friends
+ *     summary: Find users friends
+ *     parameters:
+ *       - name: u1
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name : u2
+ *         description: user id
+ *         in: path
+ *         required: true
+ *         type: string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Friend'
+ */
+ exports. findIfFriend= function (req, res, next) {
+    const u1 = req.params.u1;
+    const u2 = req.params.u2;
+    Friends.findIfFriend(dbUtils.getSession(req), u1,u2)
+      .then(response => writeResponse(res, response))
+      .catch(next);
+  };
+
+
 

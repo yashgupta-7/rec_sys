@@ -79,6 +79,8 @@ api.get("/movies", routes.movies.list);
 api.get("/movies/spotlight", routes.movies.getMoviesInSpotlight);
 
 api.get("/friends/:id", routes.friends.getFriendsById);
+api.get("/friends/:u1/:u2/:f", routes.friends.changeFriends);
+api.get("/friends/:u1/:u2", routes.friends.findIfFriend);
 
 // api.get("/movies/reco/:name", routes.movies.getRecoMoviesByName);
 api.get("/movies/recommended", routes.movies.getRecommendedMovies);

@@ -13,6 +13,8 @@ export default function* movieFlow() {
     takeEvery(Types.FRIEND_DETAIL_GET_REQUEST, getFriends),
     takeEvery(Types.MOVIE_RATE, rateMovie),
     takeEvery(Types.MOVIE_DELETE_RATING, deleteRating),
+    takeEvery(Types.FOLLOW_DETAIL_GET_REQUEST, getFollow),
+    takeEvery(Types.FOLLOWCHECK_DETAIL_GET_REQUEST, getFollowCheck),
   ]);
 }
 
@@ -74,6 +76,28 @@ function* getFriends(action) {
   try {
     const response = yield call(MoviesApi.getFriends, id);
     yield put(Actions.getFriendsSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getFriendsFailure(error));
+  }
+}
+
+function* getFollow(action) {
+  var {u1,u2,f} = action;
+  try {
+    const response = yield call(MoviesApi.getFollow, u1,u2,f);
+    yield put(Actions.getFollowSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getFriendsFailure(error));
+  }
+}
+
+function* getFollowCheck(action) {
+  var {u1,u2} = action;
+  try {
+    const response = yield call(MoviesApi.getFollowCheck, u1,u2);
+    yield put(Actions.getFollowCheckSuccess(response));
   }
   catch (error) {
     yield put(Actions.getFriendsFailure(error));
