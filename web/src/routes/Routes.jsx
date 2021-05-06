@@ -9,6 +9,7 @@ import Signup from '../pages/Signup.jsx';
 import SignupStatus from '../pages/SignupStatus.jsx';
 import User from '../pages/User.jsx'
 import Profile from '../pages/Profile.jsx';
+import Friend from '../pages/Friend.jsx';
 import {getProfile} from '../redux/actions/ProfileActions';
 import UserSession from '../UserSession';
 // import { bindActionCreators } from 'redux';

@@ -89,7 +89,7 @@ class Profile extends React.Component {
           <div className="small-12 columns">
             <div>
               <div>
-                Recommended for me
+                Recommended for me(In Profile page)
               </div>
               {
                 !_.isEmpty(recommendedMovies) ?
