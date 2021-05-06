@@ -6,6 +6,7 @@ const Movie = module.exports = function (_node, myRating) {
   _.extend(this, _node.properties);
 
   this.id = this.id;
+  this.writer=this.writer;
   this.poster_image = this.poster_image;
   this.tagline = this.tagline;
 

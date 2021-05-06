@@ -66,7 +66,7 @@ const getFriendsById = function (session, id) {
       //               'where (u1.username=$us1 and u2.username=$us2) or (u1.username=$us2 and u2.username=$us1) '+
       //                'DELETE f';
       query = 'MATCH (u1: User)-[f:FOLLOWING]->(u2: User) ' + 
-      // 'where (u1.username=$us1 and u2.username=$us2) or (u1.username=$us2 and u2.username=$us1) '+
+      'where (u1.username=$us1 and u2.username=$us2) '+
        'DELETE f';
       console.log("Hey_else",query,us1,us2,f);
     }

@@ -77,7 +77,7 @@ class Home extends React.Component {
           {isLoggedIn ?
           <div className="large-12 columns">
             {/* <h2>Hello</h2> */}
-            hello
+            {/* hello */}
             {this.renderByGenre('Adventure')}
             {/* {this.renderByGenre('Drama')} */}
           </div>

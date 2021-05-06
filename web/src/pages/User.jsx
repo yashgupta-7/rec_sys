@@ -97,6 +97,9 @@ class User extends React.Component {
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
         {/* {this.call_getFollowCheck();} */}
+        <div>
+            Profile Page of user : {username}
+          </div>
         <div className="nt-box">
         <div className="row text-center">
               <button className="btn"
@@ -106,14 +109,14 @@ class User extends React.Component {
                       // disabled={!canSubmit}
                       >
                 {/* {f ? <h5>UnFollow ${isFollow} </h5> :<h5>Follow  ${isFollow}</h5>} */}
-                {isFollow[0]=="0" ? <h5>Follow </h5> :<h5>UnFollow</h5>}
+                {isFollow[0]=="0" ? <h5>Follow </h5> :<h5>UnFollow</h5>} {username}
                 {/* {isFollow[0]=="0" ? "heyaa" : "yoy"} */}
               </button>
         </div>
 
 
           <div>
-            Friends
+            {username} follows : 
           </div>
           {/* <Carousel> */}
           <ul>
