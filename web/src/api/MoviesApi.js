@@ -57,6 +57,11 @@ export default class MoviesApi {
       return axios.get(`${apiBaseURL}/movies/${id}`);
   }
 
+  static getGenre(id) {
+    // console.log("NEWW",id);
+    return axios.get(`${apiBaseURL}/genres/${id}`);
+}
+
   static rateMovie(id, rating) {
     return axios.post(`${apiBaseURL}/movies/${id}/rate`, {rating});
   }

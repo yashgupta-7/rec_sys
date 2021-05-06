@@ -81,6 +81,7 @@ api.get("/movies/spotlight", routes.movies.getMoviesInSpotlight);
 api.get("/movies/recommended", routes.movies.getRecommendedMovies);
 api.get("/movies/rated", routes.movies.findMoviesRatedByMe);
 api.get("/movies/:id", routes.movies.findById);
+// api.get("/movies/name/:id", routes.movies.findByName);
 api.get("/movies/genre/:id", routes.movies.findByGenre);
 api.get("/movies/daterange/:start/:end", routes.movies.findMoviesByDateRange);
 api.get("/movies/directed_by/:id", routes.movies.findMoviesByDirector);
@@ -92,6 +93,7 @@ api.get("/people", routes.people.list);
 api.get("/people/:id", routes.people.findById);
 api.get("/people/bacon", routes.people.getBaconPeople);
 api.get("/genres", routes.genres.list);
+api.get("/genres/:id", routes.movies.findByGenre);
 
 //api error handler
 api.use(function (err, req, res, next) {

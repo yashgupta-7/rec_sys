@@ -46,12 +46,14 @@ class App extends React.Component {
 App.displayName = 'App';
 App.propTypes = {
   movie: PropTypes.object,
+  genre: PropTypes.object,
   person: PropTypes.object
 };
 
 function mapStateToProps(state) {
   return {
     movie: state.movies.detail,
+    genre: state.genres.detail,
     person: state.person.detail,
     auth: state.auth,
     profile: _.get(state.profile, 'profile', null)

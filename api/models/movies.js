@@ -51,9 +51,33 @@ const _getByWriter = function (params, options, callback) {
 };
 
 function manyMovies(neo4jResult) {
+  // console.log("RESSS", neo4jResult);
   return neo4jResult.records.map(r => new Movie(r.get('movie')))
 }
 
+function remove_duplicates_safe(arr) {
+  var seen = {};
+  var ret_arr = [];
+  for (var i = 0; i < arr.length; i++) {
+      if (!(arr[i]['title'] in seen) || !(arr[i]['name'] in seen)) {
+          ret_arr.push(arr[i]);
+          seen[arr[i]['title']] = true;
+          seen[arr[i]['name']] = true;
+          // console.log(arr[i]['title']);
+      }
+  }
+  return ret_arr;
+
+}
+
+function manyGenres(neo4jResult) {
+  console.log("RESSS", neo4jResult);
+  const result = {};
+  result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie'))));
+  result.genres = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('genre'))));
+  // console.log("RESULT", result);
+  return result;
+}
 // get all movies
 const getAll = function (session) {
   return session.readTransaction(txc => (
@@ -91,6 +115,50 @@ const getById = function (session, movieId, userId) {
   return session.readTransaction(txc =>
       txc.run(query, {
         movieId: parseInt(movieId),
+        userId: userId
+      })
+    )
+    .then(result => {
+      console.log("rrrrrrrrrrrrrrrr",result.records[0]);
+      if (!_.isEmpty(result.records)) {
+        return _singleMovieWithDetails(result.records[0]);
+      }
+      else {
+        throw {message: 'movie not found', status: 404}
+      }
+    });
+};
+
+//
+// get a single movie by id
+const getByName = function (session, movieId, userId) {
+  const query = //'MATCH (movie:Movie {id: $Id}) RETURN DISTINCT movie;' 
+  [    'MATCH (movie:Movie {title: $movieId})',
+    'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {username: $userId})',
+    'OPTIONAL MATCH (movie)<-[r:ACTED_IN]-(a:Person)',
+    'OPTIONAL MATCH (related:Movie)<--(a:Person) WHERE related <> movie',
+    'OPTIONAL MATCH (movie)-[:IN_GENRE]->(genre:Genre)',
+    'OPTIONAL MATCH (movie)<-[:DIRECTED]-(d:Person)',
+    'OPTIONAL MATCH (movie)<-[:PRODUCED]-(p:Person)',
+    'OPTIONAL MATCH (movie)<-[:WRITER_OF]-(w:Person)',
+    'WITH DISTINCT movie,',
+    'my_rated,',
+    'genre, d, p, w, a, r, related, count(related) AS countRelated',
+    'ORDER BY countRelated DESC',
+    'RETURN DISTINCT movie,',
+    'my_rated.rating AS my_rating,',
+    'collect(DISTINCT d) AS directors,',
+    'collect(DISTINCT p) AS producers,',
+    'collect(DISTINCT w) AS writers,',
+    'collect(DISTINCT{ name:a.name, id:a.id, poster_image:a.poster, role:r.role}) AS actors,',
+    'collect(DISTINCT related) AS related,',
+    'collect(DISTINCT genre) AS genres',
+  ].join('\n');
+  console.log(query, movieId);
+  //var x = 770;
+  return session.readTransaction(txc =>
+      txc.run(query, {
+        movieId: movieId,
         userId: userId
       })
     )
@@ -154,7 +222,7 @@ const getByActor = function (session, id) {
 const getByGenre = function(session, genreId) {
   console.log("genreeeeeeeeeeeee");
   const query =
-    'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE id(genre) = 1146 RETURN movie;';
+    'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE genre.id = $genreId RETURN movie;';
 //     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
 // WHERE genre.name = 'Action'
 // RETURN movie;
@@ -166,7 +234,34 @@ const getByGenre = function(session, genreId) {
       txc.run(query, {
         genreId: parseInt(genreId)
       })
-    ).then(result => manyMovies(result));
+    ).then(result => {
+      console.log("rrrrrrrrrrrrrrrr",result.records[0]);
+      return manyMovies(result)
+    });
+};
+
+//
+const getByGenreName = function(session, genreId) {
+  console.log("genreeeeeeeeeeeee");
+  const query =
+    // 'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE genre.name = $genreId RETURN movie, genre;';
+    'match (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre), (genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre)'+
+    'where genre.name = $genreId  with count(u1) as c, movie, g2 as genre return movie, genre order by c desc;'
+//     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
+// WHERE genre.name = 'Action'
+// RETURN movie;
+    // 'MATCH (movie:Movie)-[:IN_GENRE]->(genre)',
+    // 'WHERE toLower(genre.name) = toLower($genreId) OR id(genre) = toInteger($genreId)', // while transitioning to the sandbox data             
+    // 'RETURN movie'
+  // console.log(query);
+  return session.readTransaction(txc =>
+      txc.run(query, {
+        genreId: genreId
+      })
+    ).then(result => {
+      // console.log("rrrrrrrrrrrrrrrr",result.records);
+      return manyGenres(result)
+    });
 };
 
 // Get many movies directed by a person
@@ -291,9 +386,11 @@ module.exports = {
   getAll: getAll,
   getInSpotlight: getInSpotlight,
   getById: getById,
+  getByName: getByName,
   getByDateRange: getByDateRange,
   getByActor: getByActor,
   getByGenre: getByGenre,
+  getByGenreName: getByGenreName,
   getMoviesbyDirector: getByDirector,
   getMoviesByWriter: getByWriter,
   rate: rate,

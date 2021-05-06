@@ -109,15 +109,24 @@ exports.list = function (req, res, next) {
  *         description: movie not found
  */
 exports.findById = function (req, res, next) {
-  console.log("HI");
-  Movies.getById(dbUtils.getSession(req), req.params.id, req.user.username)
+  console.log("HI findById");
+  let isnum = /^\d+$/.test(req.params.id);
+  console.log("HI", isnum);
+  if (isnum){
+    Movies.getById(dbUtils.getSession(req), req.params.id, req.user.username)
     .then(response => writeResponse(res, response))
     .catch(next);
+  }
+  else{
+    Movies.getByName(dbUtils.getSession(req), req.params.id, req.user.username)
+    .then(response => writeResponse(res, response))
+    .catch(next);
+  }
 };
 
 /**
  * @swagger
- * /api/v0/movies/genre/{id}:
+ * /api/v0/genres/{id}:
  *   get:
  *     tags:
  *     - movies
@@ -130,7 +139,7 @@ exports.findById = function (req, res, next) {
  *         description: genre id
  *         in: path
  *         required: true
- *         type: integer
+ *         type: string
  *     responses:
  *       200:
  *         description: A list of movies
@@ -145,9 +154,18 @@ exports.findByGenre = function (req, res, next) {
   const id = req.params.id;
   if (!id) throw {message: 'Invalid id', status: 400};
   console.log("routes genreee", id);
-  Movies.getByGenre(dbUtils.getSession(req), id)
+  let isnum = /^\d+$/.test(req.params.id);
+  console.log("HI", isnum);
+  if (isnum){
+    Movies.getByGenre(dbUtils.getSession(req), id)
     .then(response => writeResponse(res, response))
     .catch(next);
+  }
+  else{
+    Movies.getByGenreName(dbUtils.getSession(req), id)
+    .then(response => writeResponse(res, response))
+    .catch(next);
+  }
 };
 
 /**

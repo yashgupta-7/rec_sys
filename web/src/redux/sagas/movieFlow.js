@@ -9,6 +9,7 @@ export default function* movieFlow() {
     takeEvery(Types.MOVIES_BY_GENRES_GET_REQUEST, getMoviesByGenre),
     takeEvery(Types.MOVIES_FEATURED_GET_REQUEST, getFeaturedMovies),
     takeEvery(Types.MOVIE_DETAIL_GET_REQUEST, getMovie),
+    takeEvery(Types.GENRE_DETAIL_GET_REQUEST, getGenre),
     takeEvery(Types.MOVIE_RATE, rateMovie),
     takeEvery(Types.MOVIE_DELETE_RATING, deleteRating),
   ]);
@@ -53,6 +54,17 @@ function* getMovie(action) {
   }
   catch (error) {
     yield put(Actions.getMovieFailure(error));
+  }
+}
+
+function* getGenre(action) {
+  var {id} = action;
+  try {
+    const response = yield call(MoviesApi.getGenre, id);
+    yield put(Actions.getGenreSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getGenreFailure(error));
   }
 }
 

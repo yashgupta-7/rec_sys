@@ -3,6 +3,7 @@ import {Route} from 'react-router';
 import App from '../pages/App.jsx';
 import Home from '../pages/Home.jsx';
 import Movie from '../pages/Movie.jsx';
+import Genre from '../pages/Genre.jsx';
 import Person from '../pages/Person.jsx';
 import Login from '../pages/Login.jsx';
 import Signup from '../pages/Signup.jsx';
@@ -19,6 +20,7 @@ export default class Routes extends React.Component {
       <App>
         <Route exact path="/" component={Home}/>
         <Route path="/movie/:id" component={Movie}/>
+        <Route path="/genre/:id" component={Genre}/>
         <Route path="/person/:id" component={Person}/>
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>

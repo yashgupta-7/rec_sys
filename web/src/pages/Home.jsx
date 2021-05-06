@@ -123,7 +123,7 @@ class Home extends React.Component {
                        />
               </div>
               <div>
-                  <Link to={`/movie/${this.state.genre_name}`} className="button ba-default-btn">Search by Genre</Link>
+                  <Link to={`/genre/${this.state.genre_name}`} className="button ba-default-btn">Search by Genre</Link>
                 </div>
             
      

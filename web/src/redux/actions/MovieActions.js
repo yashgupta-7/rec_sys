@@ -4,6 +4,10 @@ export function clearMovie() {
   return {type: Types.MOVIE_DETAIL_CLEAR};
 }
 
+export function clearGenre() {
+  return {type: Types.GENRE_DETAIL_CLEAR};
+}
+
 export function getGenres() {
   return {type: Types.MOVIE_GENRES_GET_REQUEST};
 }
@@ -48,12 +52,24 @@ export function getMovie(id) {
   return {type: Types.MOVIE_DETAIL_GET_REQUEST, id};
 }
 
+export function getGenre(id) {
+  return {type: Types.GENRE_DETAIL_GET_REQUEST, id};
+}
+
 export function getMovieSuccess(response) {
   return {type: Types.MOVIE_DETAIL_GET_SUCCESS, response};
 }
 
+export function getGenreSuccess(response) {
+  return {type: Types.GENRE_DETAIL_GET_SUCCESS, response};
+}
+
 export function getMovieFailure(error) {
   return {type: Types.MOVIE_DETAIL_GET_FAILURE, error};
+}
+
+export function getGenreFailure(error) {
+  return {type: Types.GENRE_DETAIL_GET_FAILURE, error};
 }
 
 export function rateMovie(id, rating) {
