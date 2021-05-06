@@ -334,22 +334,31 @@ const getRecommended = function (session, userId) {
   console.log("CALED", userId);
   return session.readTransaction(txc =>
     txc.run(
-      'MATCH (me:User)-[r1:LIKES_GENRE]->(g:Genre)<-[r2:LIKES_GENRE]-(u:User)-[r3:RATED_MOVIE]->(b2:Movie) \
-      WHERE me.username = $userId AND  r3.rating > 3 AND NOT (me)-[:RATED_MOVIE]->(b2) \
-      RETURN distinct b2 AS movie, count(*) AS count \
+      // 'MATCH (me:User)-[r1:LIKES_GENRE]->(g:Genre)<-[r2:LIKES_GENRE]-(u:User)-[r3:RATED_MOVIE]->(b2:Movie) \
+      // WHERE me.username = $userId AND  r3.rating > 3 AND NOT (me)-[:RATED_MOVIE]->(b2) \
+      // RETURN distinct b2 AS movie, count(*) AS count \
+      // ORDER BY count DESC \
+      // LIMIT 10',
+      // // 'MATCH (me:User {id: $userId})-[my:RATED]->(m:Movie) \
+      // // MATCH (other:User)-[their:RATED]->(m) \
+      // // WHERE me <> other \
+      // // AND abs(my.rating - their.rating) < 2 \
+      // // WITH other,m \
+      // // MATCH (other)-[otherRating:RATED]->(movie:Movie) \
+      // // WHERE movie <> m \
+      // // WITH avg(otherRating.rating) AS avgRating, movie \
+      // // RETURN movie \
+      // // ORDER BY avgRating desc \
+      // // LIMIT 25',
+      // {userId: userId}
+      // 'MATCH (:User {username: $userId})-[rated:RATED]->(movie:Movie) \
+      //  RETURN DISTINCT movie, rated.rating as my_rating',
+      // {userId: userId}
+      'MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
+      WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3 AND NOT (me)-[:RATED]->(m2) \
+      RETURN distinct m2 AS movie, count(*) AS count \
       ORDER BY count DESC \
       LIMIT 10',
-      // 'MATCH (me:User {id: $userId})-[my:RATED]->(m:Movie) \
-      // MATCH (other:User)-[their:RATED]->(m) \
-      // WHERE me <> other \
-      // AND abs(my.rating - their.rating) < 2 \
-      // WITH other,m \
-      // MATCH (other)-[otherRating:RATED]->(movie:Movie) \
-      // WHERE movie <> m \
-      // WITH avg(otherRating.rating) AS avgRating, movie \
-      // RETURN movie \
-      // ORDER BY avgRating desc \
-      // LIMIT 25',
       {userId: userId}
     )
   ).then(result => manyMovies(result));

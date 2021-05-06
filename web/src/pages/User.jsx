@@ -44,30 +44,18 @@ class User extends React.Component {
   componentDidMount() {
     var {username,myname} = this.props.match.params;
     console.log("params",username,myname)
-    var {profile, ratedMovies, recommendedMovies} = this.props.profile;
-    console.log("my sweet profile mount",profile);
-    var {props} = this;
-    // this.props.dispatch(getProfile());
-    var prof=getProfile();
-    
-    console.log("GET RPFGOILE FUNC",prof);
-    // var profile = _.get(props, 'profile');
-    var myname = _.get(props, 'profile.username');
     this.props.getFriends(username);
     console.log("did mount",username,myname,this.props.profile);
-    // this.props.getFollowCheck(username,myname);
+    this.props.getFollowCheck(myname,username);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.username !== this.props.match.params.username) {
       this.props.clearFriends();
 
-      var {username} = this.props.match.params;
-      var {props} = this;
-      // var profile = _.get(props, 'profile');
-      var myname = _.get(props, 'profile.username');
+      var {username,myname} = this.props.match.params;
       this.props.getFriends(username);
-      // this.props.getFollowCheck(username,myname);
+      this.props.getFollowCheck(myname,username);
     }
   }
 
@@ -117,7 +105,9 @@ class User extends React.Component {
                       onClick={this.change_Follow}
                       // disabled={!canSubmit}
                       >
-                {f ? <h5>UnFollow </h5> :<h5>Follow </h5>}
+                {/* {f ? <h5>UnFollow ${isFollow} </h5> :<h5>Follow  ${isFollow}</h5>} */}
+                {isFollow[0]=="0" ? <h5>Follow </h5> :<h5>UnFollow</h5>}
+                {/* {isFollow[0]=="0" ? "heyaa" : "yoy"} */}
               </button>
         </div>
 
@@ -353,9 +343,10 @@ class User extends React.Component {
     
     console.log("follow button paramssssss",this.props.isFollow,myname,username);
     // this.props.getFollowCheck(username,myname);
-    var flag= f ? 0 : 1 ;
+    // var flag= f ? 0 : 1 ;
+    var flag= isFollow[0]=="0" ? 1 : 0;
 
-    this.props.getFollow(myname,username,this.state.doesFollow);
+    this.props.getFollow(myname,username,flag);
     console.log("follow button afterwards",this.props.isFollow[0],flag);
     setTimeout(() => {
       this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
