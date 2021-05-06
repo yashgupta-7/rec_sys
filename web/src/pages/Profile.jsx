@@ -9,6 +9,16 @@ import _ from 'lodash';
 import * as ProfileActions from '../redux/actions/ProfileActions';
 
 class Profile extends React.Component {
+  constructor() {
+    super();
+    
+    this.handleChange_username = this.handleChange_username.bind(this);
+    this.state = {
+      username: '',
+      // genre_name: '',
+     
+    };
+  }
   componentDidMount() {
     this.props.getProfileRatings();
     this.props.getProfileRecommendations();
@@ -16,7 +26,7 @@ class Profile extends React.Component {
 
   render() {
     var {profile, ratedMovies, recommendedMovies} = this.props.profile;
-    var {profileRateMovie, profileDeleteMovieRating} = this.props;
+    var {profileRateMovie, profileDeleteMovieRating,username} = this.props;
     console.log("HEHEHEHE", recommendedMovies);
     if (!profile) {
       return null;
@@ -112,15 +122,33 @@ class Profile extends React.Component {
                   :
                   null
               }
+              
             </div>
+            
           </div>
         </div>
+
+        <div className="row">      
+                <input name = "search_by_username"
+                type="text"
+                       placeholder="Search by username"
+                       required
+                       value={username}
+                       onChange={this.handleChange_username}
+                       />
+                 <Link to={`/user/${this.state.username}`} className="button ba-default-btn">Search by UserName</Link>
+          </div>
+       
       </div>
     );
   }
+
+handleChange_username(event) {
+    this.setState({username: event.target.value});}
 }
 
-function mapStateToProps(state) {
+
+  function mapStateToProps(state) {
   return {
     profile: _.get(state, 'profile'),
   };
