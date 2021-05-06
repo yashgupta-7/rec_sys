@@ -91,7 +91,7 @@ class User extends React.Component {
           <div className="small-12 columns">
             <div>
               <div>
-                Recommended for me
+                Recommended for me (in User Page)
               </div>
               {
                 !_.isEmpty(recommendedMovies) ?
