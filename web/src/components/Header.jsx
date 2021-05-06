@@ -18,10 +18,6 @@ class Header extends React.Component {
       <nav className="nt-app-header">
         {/* <div className="nt-app-header-logo"> */}
           <h3><center>Movie-Book Recommendations App</center></h3>
-          {/* <Link to="/">
-            <img src={logoImg} alt="" />
-          </Link> */}
-        {/* </div> */}
         <ul className="nt-app-header-links">
           <li>
             <a className="nt-app-header-link"
@@ -45,7 +41,7 @@ class Header extends React.Component {
                 : null
             }
             <div className="log-container">
-              {isLoggedIn ? <button onClick={this.logout.bind(this)} className="buttonLink logout">Log out</button> : <Link to="/login">Log in</Link>}
+              {isLoggedIn ? <center><button onClick={this.logout.bind(this)} className="buttonLink logout">Log out</button></center> : <Link to="/login">Log in</Link>}
             </div>
             <div>
               {isLoggedIn ? null : <Link to="/signup">Sign up</Link>}

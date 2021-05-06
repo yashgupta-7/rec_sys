@@ -10,7 +10,7 @@ export default class FriendsApi {
   }
 
  // convert this to top 3 most rated movies
-  static getFeaturedUsers() {
+  static getFeaturedFriends() {
     return axios.get(`${apiBaseURL}/friends/spotlight`);
     // return Promise.all([
     //    axios.get(`${apiBaseURL}/movies/770`),

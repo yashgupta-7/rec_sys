@@ -69,7 +69,7 @@ class Home extends React.Component {
     return (
         <div className="nt-home">
         <div className="row">
-        {isLoggedIn ? null :  <h3 className="nt-home-header">Welcome! Please Log in</h3> }
+        {isLoggedIn ? null :  <h3 className="nt-home-header" fontcolor='red'>Please log in for personalized recommendations</h3> }
           <div className="large-12 columns">
             {movies.isFetching ? <Loading/> : null}
             {this.renderFeatured()}

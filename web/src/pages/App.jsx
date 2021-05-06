@@ -25,10 +25,11 @@ class App extends React.Component {
     console.log("HERE", auth);
     return (
       <div className="nt-app">
-        <Header auth={auth}
-                profile={profile}/>
         <Breadcrumbs movie={movie}
                      person={person}/>
+        <Header auth={auth}
+                profile={profile}/>
+        
         <div className="nt-app-page">
           {this.props.children}
           {/* {React.cloneElement(this.props.children, { auth={auth}, profile={profile} })}

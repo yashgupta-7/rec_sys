@@ -6,6 +6,8 @@
 
   &-title {
     text-align: center;
+    color: #ba0000;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
   }
 
   &-rating {
@@ -17,7 +19,8 @@
   }
 
   &-poster {
-    width: 100%;
+    width: 7.5cm;
+    height: 10cm;
   }
 
   &-aside {

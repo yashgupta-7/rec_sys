@@ -1,5 +1,5 @@
 .nt-app-header {
-  background: lightgrey;
+  background: #ffffff;
   padding: .5rem 1rem;
   height: 104px;
   @media (max-width: 385px) {
@@ -31,9 +31,9 @@
       }
 
       &::before {
-        color: #AAAAAA;
+        color: #ffffff;
         content: "";
-        border-right: 1px solid darkgray;
+        border-right: 1px solid #ffffff;
         margin: 0 1rem;
         position: relative;
         top: 1px;

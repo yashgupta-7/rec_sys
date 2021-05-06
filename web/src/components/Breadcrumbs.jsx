@@ -7,6 +7,7 @@ export default class Breadcrumbs extends React.Component {
     var {movie, person} = this.props;
 
     return (
+      <div>
       <ul className="breadcrumbs">
         <li><Link to="/" className={movie ? '' : 'current'}>Home</Link></li>
         {
@@ -20,6 +21,8 @@ export default class Breadcrumbs extends React.Component {
             : null
         }
       </ul>
+      </div>
+      
     );
   }
 }

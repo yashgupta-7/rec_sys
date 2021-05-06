@@ -42,38 +42,20 @@ class Movie extends React.Component {
               </div>
             </div>
             <div className="row">
-              <div className="small-12 medium-4 columns nt-movie-aside">
-                <img className="nt-movie-poster"
-                     src={movie.posterImage}
-                     alt="" />
-                <div className="nt-box">
-                  <div className="nt-box-title">
-                    Storyline
-                  </div>
-                  <p className="nt-box-row">
-                    <span>{movie.tagline}</span>
-                  </p>
-                </div>
               </div>
+              {/* <div className="small-12 medium-8 columns nt-movie-main"> */}
               <div className="small-12 medium-8 columns nt-movie-main">
                 <div>
-                  {profile ?
-                    <div className="nt-box">
-                      <p className="nt-box-row nt-movie-rating">
-                        <strong>Your rating: {movie.myRating} </strong>
-                        <UserRating movieId={movie.id}
-                                    savedRating={movie.myRating}
-                                    onSubmitRating={rateMovie}
-                                    onDeleteRating={deleteMovieRating}/>
-                      </p>
-                    </div>
-                    :
-                    null
-                  }
                   <div className="nt-box">
-                    <div className="nt-box-title">
-                      Movie Details
-                    </div>
+                  {/* <div className="nt-box-title">
+                    Storyline
+                  </div> */}
+                  <p className="nt-box-row">
+                  <strong>Tagline: </strong>
+                   <span>{movie.tagline}</span> 
+                  </p>
+                
+        
                     <p className="nt-box-row">
                       <strong>Year: </strong><span>{movie.released}</span>
                     </p>
@@ -88,23 +70,34 @@ class Movie extends React.Component {
                       <strong>Directed By: </strong>
                       <span>{this.renderPeople(movie.directors)}</span>
                     </p>
+                    <p className="nt-box-row">
+                      <strong>Cast: </strong>
+                      <span>{this.renderCast(movie.actors)}</span>
+                    </p>
+                    <p className="nt-box-row">
+                      <strong>Related Movies: </strong>
+                      <span>{this.renderRelatedMovies(movie.related)}</span>
+                    </p>
                   </div>
-                  <div className="nt-box">
-                    <div className="nt-box-title">
-                      Cast
+                </div>
+              </div>
+              <div className="small-12 medium-4 columns nt-movie-aside">
+                <img className="nt-movie-poster"
+                     src={movie.posterImage}
+                     alt="" />
+                {profile ?
+                    <div className="nt-box">
+                      <p className="nt-box-row nt-movie-rating">
+                        <strong>Your rating: {movie.myRating} </strong>
+                        <UserRating movieId={movie.id}
+                                    savedRating={movie.myRating}
+                                    onSubmitRating={rateMovie}
+                                    onDeleteRating={deleteMovieRating}/>
+                      </p>
                     </div>
-                    <div>{this.renderCast(movie.actors)}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="small-12 columns">
-                <div className="nt-box">
-                  <div className="nt-box-title">
-                    Related
-                  </div>
-                  {this.renderRelatedMovies(movie.related)}
-                </div>
-              </div>
+                    :
+                    null
+                  }
             </div>
           </div>
           :
@@ -121,53 +114,27 @@ class Movie extends React.Component {
       .join(', ');
   }
 
+  
+
   renderCast(actors) {
     if (_.isEmpty(actors)) {
       return null;
     }
 
     return (
-      <div>
-        {
-          actors.map(a => {
+          actors.map((a,i) => {
             return (
-              <div key={a.id}>
-                <Link to={`/person/${a.id}`}>
-                  <img src={a.posterImage} alt="" />
-                </Link>
-                <div className="nt-carousel-actor-name"><Link to={`/person/${a.id}`}>{a.name}</Link></div>
-                <div className="nt-carousel-actor-role">{a.role}</div>
-              </div>
+              <span key={a.id}>
+                <span className="nt-carousel-actor-name"><Link to={`/person/${a.id}`}>{a.name}</Link></span>
+                <span> (</span> 
+                <span className="nt-carousel-actor-role">{a.role}</span>
+                <span>)</span>
+                {i < actors.length - 1 ? <span>, </span> : null}
+              </span>
             );
           })
-        }
-      </div>);
+       );
   }
-
-  renderRelatedMovies(movies) {
-    if (_.isEmpty(movies)) {
-      return null;
-    }
-
-    return (
-      <div>
-        {
-          movies.map(m => {
-            return (
-              <div key={m.id}>
-                <Link to={`/movie/${m.id}`}>
-                  <img src={m.posterImage} alt="" />
-                </Link>
-                <div className="nt-carousel-movie-title">
-                  <Link to={`/movie/${m.id}`}>{m.title}</Link>
-                </div>
-              </div>
-            );
-          })
-        }
-      </div>);
-  }
-
   renderPeople(people) {
     // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", people);
     return people.map((p, i) => {
@@ -178,6 +145,26 @@ class Movie extends React.Component {
       </span>);
     });
   }
+
+  renderRelatedMovies(movies) {
+    if (_.isEmpty(movies)) {
+      return null;
+    }
+    return (
+          movies.map((m,i) => {
+            return (
+              <span key={m.id}>
+                 <Link to={`/movie/${m.id}`}>
+                  <img src={m.posterImage} alt="*" />
+                </Link>
+                  <Link to={`/movie/${m.id}`}>{m.title}</Link>
+                  {i < movies.length - 1 ? <span>, </span> : null}
+              </span>
+            );
+          }));
+  }
+
+  
 
   renderGenre(genres) {
     // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", genres);
