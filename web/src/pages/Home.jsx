@@ -102,6 +102,7 @@ class Home extends React.Component {
       {isLoggedIn ?
       <div>
       <div className="row">      
+      <div className="small-12 medium-8 columns nt-movie-main">
                 <input name = "search_by_name"
                 type="text"
                        placeholder="Search by movie name*"
@@ -111,10 +112,13 @@ class Home extends React.Component {
                        />
               </div>
               <div>
+              <div className="small-12 medium-4 columns nt-movie-main">
                   <Link to={`/movie/${this.state.movie_name}`} className="button ba-default-btn">Search by Name</Link>
                 </div>
+                </div>
 
-                <div className="row">      
+                <div className="row">     
+                <div className="small-12 medium-8 columns nt-movie-main"> 
                 <input name = "search_by_genre"
                 type="text"
                        placeholder="Search by genre*"
@@ -124,10 +128,14 @@ class Home extends React.Component {
                        />
               </div>
               <div>
+              <div className="small-12 medium-4 columns nt-movie-main">
                   <Link to={`/genre/${this.state.genre_name}`} className="button ba-default-btn">Search by Genre</Link>
+                </div>
+                </div>
                 </div>
             
      
+      </div>
       </div>
       : null }
 
@@ -147,6 +155,7 @@ class Home extends React.Component {
             );
           })}
         </ul>
+        
       </div>
       
     );

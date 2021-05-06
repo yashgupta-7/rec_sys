@@ -96,11 +96,11 @@ class Login extends React.Component {
                       name="submit-login"
                       onClick={this.login}
                       disabled={!canSubmit}>
-                Submit
+                Login
               </button>
             </div>
             <div className="row text-center">
-              <Link to="/signup">Create an account</Link>
+              <Link to="/signup" style={{ color: '#ba0000'}}>Create an account</Link>
             </div>
           </div>
         </form>
