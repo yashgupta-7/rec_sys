@@ -83,7 +83,7 @@ class User extends React.Component {
       this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
       console.log("setTimeout setState");
       this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
-    }, 10)
+    }, 1)
     var {username,myname} = this.props.match.params;
     var {profile, ratedMovies, recommendedMovies} = this.props.profile;
     console.log("my sweet profile",profile);

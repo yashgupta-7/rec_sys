@@ -68,7 +68,7 @@ class Signup extends React.Component {
         <form noValidate>
           <div className="panel small-12 small-centered columns">
             <div className="row panel-title">
-              <h3>Create an Account</h3>
+              <h3 style={{ color: '#ba0000'}}>Create an Account</h3>
             </div>
             <div className="row">
               <InputValidator fieldName="User name"

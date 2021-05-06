@@ -33,7 +33,7 @@ class Header extends React.Component {
             {
               profile ?
               <div>
-                <h5 style={{ height: 40 }}> Welcome {profile.username} ! </h5>
+                <h10 style={{ height: 40 , fontWeight: 100}}> {profile.username} </h10>
                 <div className="nt-app-header-avatar" style={this.getAvatarStyle(profile)}>
                   <Link to="/profile" title={`profile: ${profile.username}`}/>
                 </div>
@@ -41,10 +41,10 @@ class Header extends React.Component {
                 : null
             }
             <div className="log-container">
-              {isLoggedIn ? <center><button onClick={this.logout.bind(this)} className="buttonLink logout">Log out</button></center> : <Link to="/login">Log in</Link>}
+              {isLoggedIn ? <center><button className="btn" onClick={this.logout.bind(this)} className="buttonLink logout">Log out</button></center> : <Link to="/login" style={{ color: '#000000', fontStyle: 'italic', background: '#ba0000' }}> Log in </Link>}
             </div>
             <div>
-              {isLoggedIn ? null : <Link to="/signup">Sign up</Link>}
+              {isLoggedIn ? null : <Link style={{ color: '#000000', fontStyle: 'italic', background: '#ba0000' }} to="/signup">Sign up</Link>}
             </div>
           </div>
         </div>

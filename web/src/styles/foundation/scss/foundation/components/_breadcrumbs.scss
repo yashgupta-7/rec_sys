@@ -11,7 +11,6 @@ $include-html-nav-classes: $include-html-classes !default;
 
 // We use this to set the background color for the breadcrumb container.
 $crumb-bg: #ba0000;
-// scale-color($secondary-color, $lightness: 100%) !default;
 
 // We use these to set the padding around the breadcrumbs.
 $crumb-padding: rem-calc(9 14 9) !default;
@@ -25,15 +24,19 @@ $crumb-border-color: scale-color($crumb-bg, $lightness: $crumb-function-factor) 
 $crumb-radius: $global-radius !default;
 
 // We use these to set various text styles for breadcrumbs.
-$crumb-font-size: rem-calc(11) !default;
-$crumb-font-color: $primary-color !default;
+$crumb-font-size: rem-calc(20) !default;
+$crumb-font-face: bold !default;
+$crumb-font-face: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; ;
+$crumb-font-color: #ffffff;
 $crumb-font-color-current: $oil !default;
 $crumb-font-color-unavailable: $aluminum !default;
-$crumb-font-transform: uppercase !default;
+$crumb-font-transform:  !default;
+
 $crumb-link-decor: underline !default;
+$crumb-font-decoration: underline !default;
 
 // We use these to control the slash between breadcrumbs
-$crumb-slash-color: $base !default;
+$crumb-slash-color: #000000 !default;
 $crumb-slash: "/" !default;
 $crumb-slash-position: 1px !default;
 
