@@ -430,9 +430,9 @@ function filterRated_recommended(neo4jResult) {
     if(!seen[result.movies2[i]['title']])
       result.movies.push(result.movies2[i]);
   }
-  // result.movies= result.movies1+result.movies2;
-  result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book'), r.get('book_rating'))));
-  result.m_follow = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('m_follow'), r.get('book_rating'))));
+  result.movies= result.movies.slice(0,6);
+  result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book'), r.get('book_rating')))).slice(0,6);
+  result.m_follow = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('m_follow'), r.get('book_rating')))).slice(0,6);
   console.log(result);
   return result;
 }
@@ -487,13 +487,12 @@ const getRecommended = function (session, userId) {
       'OPTIONAL MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
       WHERE  r1.rating >= 3 AND r2.rating >= 3 AND r3.rating >= 3  AND NOT (me)-[:RATED]->(m2) \
            OPTIONAL MATCH (me10:User {username: $userId} )-[r10:RATED]->(m10:Movie)<-[r20:RATED]-(u10:User)-[r30:RATED]->(m4:Book) \
-            where  (r30.rating >= 3 OR r30 is NULL) \
+            where  (r30.rating >= 3 OR r30 is NULL) and NOT (me10)-[:RATED]->(m4) \
             optional match (me2:User {username: $userId})-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
             where r5.rating > 3 and m_genre <> m2 and NOT (me2)-[:RATED]->(m_genre) \
             OPTIONAL MATCH (me3:User {username: $userId})-[:FOLLOWING]->(:User)-[r9:RATED]->(m_follow) where r9.rating >= 3 \
            RETURN distinct m_follow, m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
-           ORDER BY count DESC \
-           LIMIT 10',
+           ORDER BY count DESC',
       {userId: userId}
     )
   ).then(result => filterRated_recommended(result));
