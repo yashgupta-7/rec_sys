@@ -20,7 +20,7 @@ export default class Routes extends React.Component {
     return (
       <App>
         <Route exact path="/" component={Home}/>
-        <Route path="/movie/:id" component={Movie}/>
+        <Route path="/entity/:id" component={Movie}/>
         <Route path="/genre/:id" component={Genre}/>
         <Route path="/person/:id" component={Person}/>
         <Route path="/login" component={Login}/>

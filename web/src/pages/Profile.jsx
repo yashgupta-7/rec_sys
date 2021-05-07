@@ -27,7 +27,7 @@ class Profile extends React.Component {
   render() {
     var {profile, ratedMovies, recommendedMovies} = this.props.profile;
     var {profileRateMovie, profileDeleteMovieRating,username} = this.props;
-    console.log("HEHEHEHE", recommendedMovies);
+    console.log("HEHEHEHE", recommendedMovies, ratedMovies);
     if (!profile) {
       return null;
     }
@@ -63,18 +63,20 @@ class Profile extends React.Component {
           <div className="small-12 columns">
             <div>
               <div>
-                My rated movies
+                <h3>My rated</h3>
               </div>
               {!_.isEmpty(ratedMovies) ?
                 <div>
-                  {ratedMovies.map((movie, i, array) => {
+                  <br></br><h6> Movies</h6>
+                  {ratedMovies['movies'].map((movie, i, array) => {
                     return (
                       <div key={movie.id}>
-                        <Link to={`/movie/${movie.id}`}>
+                        
+                        <Link to={`/entity/${movie.id}`}>
                           
                         </Link>
                         <div className="nt-profile-movie-title">
-                          <Link to={`/movie/${movie.id}`}>
+                          <Link to={`/entity/${movie.id}`}>
                             {movie.title}
                           </Link>
                         </div>
@@ -84,10 +86,35 @@ class Profile extends React.Component {
                                       onSubmitRating={profileRateMovie}
                                       onDeleteRating={profileDeleteMovieRating}/>
                         </div>
+                        <br></br>
+                      </div>
+                    );
+                  })}
+                  <br></br><h6>Books</h6>
+                  {ratedMovies['books'].map((movie, i, array) => {
+                    if (!movie.id) return null;
+                    return (
+                      <div key={movie.id}>
+                        <Link to={`/entity/${movie.id}`}>
+                          
+                        </Link>
+                        <div className="nt-profile-movie-title">
+                          <Link to={`/entity/${movie.id}`}>
+                            {movie.title}
+                          </Link>
+                        </div>
+                        <div>
+                          <UserRating movieId={movie.id}
+                                      savedRating={movie.myRating}
+                                      onSubmitRating={profileRateMovie}
+                                      onDeleteRating={profileDeleteMovieRating}/>
+                        </div>
+                        <br></br>
                       </div>
                     );
                   })}
                 </div>
+                
                 :
                 null
               }
@@ -99,20 +126,34 @@ class Profile extends React.Component {
           <div className="small-12 columns">
             <div>
               <div>
-                Recommended for me(In Profile page)
+              <br></br><br></br> <h3>Recommended for me </h3>
               </div>
               {
                 !_.isEmpty(recommendedMovies) ?
                   // <Carousel>
                   <div>
-                    {recommendedMovies.map(m => {
+                    <h6>Movies</h6>
+                    {recommendedMovies['movies'].map(m => {
                       return (
                         <div key={m.id}>
-                          <Link to={`/movie/${m.id}`}>
-                            {/* <img src={m.posterImage} alt="" /> */}
+                          <Link to={`/entity/${m.id}`}>
+                            {/* <img src={m.posterImage} className="nt-movie-poster" float="left" alt="*" /> */}
                           </Link>
                           <div>
-                            <Link to={`/movie/${m.id}`}>{m.title}</Link>
+                            <Link to={`/entity/${m.id}`}>{m.title}</Link>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <h6>Books</h6>
+                    {recommendedMovies['books'].map(m => {
+                      return (
+                        <div key={m.id}>
+                          <Link to={`/entity/${m.id}`}>
+                            {/* <img src={m.posterImage} className="nt-movie-poster" float="left" alt="*" /> */}
+                          </Link>
+                          <div>
+                            <Link to={`/entity/${m.id}`}>{m.title}</Link>
                           </div>
                         </div>
                       );

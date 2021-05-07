@@ -12,7 +12,7 @@ export default class Breadcrumbs extends React.Component {
         <li><Link to="/" className={movie ? '' : 'current'}>Home</Link></li>
         {
           movie ?
-            <li><Link to={`/movie/${movie.id}`} className="current">{movie.title}</Link></li>
+            <li><Link to={`/entity/${movie.id}`} className="current">{movie.title}</Link></li>
             : null
         }
         {

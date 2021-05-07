@@ -3,7 +3,9 @@
 const _ = require('lodash');
 
 const Movie = module.exports = function (_node, myRating) {
-  _.extend(this, _node.properties);
+  if(_node){
+    _.extend(this, _node.properties);
+  }
 
   this.id = this.id;
   this.writer=this.writer;

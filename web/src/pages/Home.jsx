@@ -91,6 +91,7 @@ class Home extends React.Component {
   renderFeatured() {
     // var {movies} = this.props;
     var {movies, auth, profile, movie_name, genre_name} = this.props;
+    console.log("FEATUREDDDDDDDDDDDDD", movies.featured);
     var {props} = this;
     var profile = _.get(props, 'profile');
     var name = _.get(props, 'profile.username');
@@ -113,7 +114,7 @@ class Home extends React.Component {
               </div>
               <div>
               <div className="small-12 medium-4 columns nt-movie-main">
-                  <Link to={`/movie/${this.state.movie_name}`} className="button ba-default-btn">Search by Name</Link>
+                  <Link to={`/entity/${this.state.movie_name}`} className="button ba-default-btn">Search by Name</Link>
                 </div>
                 </div>
 
@@ -140,12 +141,31 @@ class Home extends React.Component {
       : null }
 
         <h3 className="nt-home-header">In the Spotlight</h3>
+
+        <h4 className="nt-home-header">Movies</h4>
         <ul>
-          { _.compact(movies.featured).map(f => {
+          { _.compact(movies.featured['movies']).map(f => {
             return (
               // key={f.id}
               <li > 
-                <Link to={`/movie/${f.id}`}>
+                <Link to={`/entity/${f.id}`}>
+                  <img src={f.posterImage} alt="" />
+                  <h5>
+                    {f.title}
+                  </h5>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        
+        <h4 className="nt-home-header">Books</h4>
+        <ul>
+          { _.compact(movies.featured['books']).map(f => {
+            return (
+              // key={f.id}
+              <li > 
+                <Link to={`/entity/${f.id}`}>
                   <img src={f.posterImage} alt="" />
                   <h5>
                     {f.title}
@@ -177,29 +197,70 @@ class Home extends React.Component {
     }
 
     return (
-      <div className="nt-home-by-genre">
-        <h3 className="nt-home-header">My Recommended Movies</h3>
-        <div className="nt-box">
-          <div>
+      <div>
+        <h3 className="nt-home-header">My Recommended Movies and Books</h3>
+        <div className="nt-home-featured">
+          {/* <div>
             {name}
-          </div>
+          </div> */}
           {/* <Carousel> */}
-          <div>
-            { moviesByGenre.map(m => {
+          {/* <div> */}
+            {/* <li> */}
+            {/* <h4 className="nt-home-header">Movies</h4> */}
+            <ul>
+            { moviesByGenre['movies'].map(m => {
               return (
-                <div key={m.id}>
-                  <Link to={`/movie/${m.id}`}>
-                    <img src={m.posterImage} alt="" />
-                  </Link>
-                  <div>
-                    <Link to={`/movie/${m.id}`}>{m.title}</Link>
-                  </div>
-                </div>
+                // <li>
+                // <div key={m.id}>
+                //   <Link to={`/entity/${m.id}`}>
+                //     <img src={m.posterImage} alt="" />
+                //   </Link>
+                //   <div>
+                //     <Link to={`/entity/${m.id}`}>{m.title}</Link>
+                //   </div>
+                // </div>
+                // </li>
+                <li > 
+                <Link to={`/entity/${m.id}`}>
+                  <img src={m.posterImage} alt="" />
+                  <h5>
+                    {m.title}
+                  </h5>
+                </Link>
+              </li>
               );
             })}
+            {/* </ul> */}
+            {/* </div> */}
+            {/* <br></br> <br></br> <br></br> */}
+            {/* <div className="nt-home-featured"> */}
+            {/* <h4 className="nt-home-header">Books</h4> */}
+            {/* <div className="nt-home-featured"> */}
+            {/* <ul > */}
+            { moviesByGenre['books'].map(m => {
+              return (
+                // <li>
+                // <div key={m.id}>
+                //   <Link to={`/entity/${m.id}`}>
+                //     <img src={m.posterImage} alt="" />
+                //   </Link>
+                //   <div>
+                //     <Link to={`/entity/${m.id}`}>{m.title}</Link>
+                //   </div>
+                // </div>
+                // </li>
+                <li > 
+                <Link to={`/entity/${m.id}`}>
+                  <img src={m.posterImage} alt="" />
+                  <h5>
+                    {m.title}
+                  </h5>
+                </Link>
+              </li>
+              );
+            })}
+            </ul>
             </div>
-          {/* </Carousel> */}
-        </div>
       </div>);
   }
 }

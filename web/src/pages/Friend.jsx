@@ -155,11 +155,11 @@ class Movie extends React.Component {
           movies.map(m => {
             return (
               <div key={m.id}>
-                <Link to={`/movie/${m.id}`}>
+                <Link to={`/entity/${m.id}`}>
                   <img src={m.posterImage} alt="" />
                 </Link>
                 <div className="nt-carousel-movie-title">
-                  <Link to={`/movie/${m.id}`}>{m.title}</Link>
+                  <Link to={`/entity/${m.id}`}>{m.title}</Link>
                 </div>
               </div>
             );

@@ -34,6 +34,7 @@ class Movie extends React.Component {
     return (
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
+        {/* {isMovie? <h3>Book</h3> : <h3>Movie</h3>} */}
         {movie ?
           <div>
             <div className="row">
@@ -50,6 +51,10 @@ class Movie extends React.Component {
                   {/* <div className="nt-box-title">
                     Storyline
                   </div> */}
+                  <p className="nt-box-row">
+                  <strong>Entity Type: </strong>
+                   <span>{movie.type}</span> 
+                  </p>
                   <p className="nt-box-row">
                   <strong>Tagline: </strong>
                    <span>{movie.tagline}</span> 
@@ -76,7 +81,11 @@ class Movie extends React.Component {
                     </p>
                     <p className="nt-box-row">
                       <strong>Related Movies: </strong>
-                      <span>{this.renderRelatedMovies(movie.related)}</span>
+                      <span>{this.renderRelatedMovies(movie.relatedMovie)}</span>
+                    </p>
+                    <p className="nt-box-row">
+                      <strong>Related Books: </strong>
+                      <span>{this.renderRelatedMovies(movie.relatedBook)}</span>
                     </p>
                   </div>
                 </div>
@@ -153,13 +162,17 @@ class Movie extends React.Component {
     return (
           movies.map((m,i) => {
             return (
+              <div className="nt-home-featured">
+              <li > 
               <span key={m.id}>
-                 <Link to={`/movie/${m.id}`}>
-                  <img src={m.posterImage} alt="*" />
+                 <Link to={`/entity/${m.id}`}>
+                  <img className="nt-movie-poster" src={m.posterImage} alt="*" />
                 </Link>
-                  <Link to={`/movie/${m.id}`}>{m.title}</Link>
+                  <Link to={`/entity/${m.id}`}>{m.title}</Link>
                   {i < movies.length - 1 ? <span>, </span> : null}
               </span>
+              </li > 
+              </div>
             );
           }));
   }

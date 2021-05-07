@@ -116,10 +116,10 @@ class Person extends React.Component {
                 movies.map(m => {
                   return (
                     <div key={m.id}>
-                      <Link to={`/movie/${m.id}`}>
+                      <Link to={`/entity/${m.id}`}>
                         <img src={m.posterImage} alt="" />
                       </Link>
-                      <div className="nt-carousel-movie-title"><Link to={`/movie/${m.id}`}>{m.name}</Link></div>
+                      <div className="nt-carousel-movie-title"><Link to={`/entity/${m.id}`}>{m.name}</Link></div>
                       {m.role ?
                         <div className="nt-carousel-movie-role">{m.role}</div>
                         : null
