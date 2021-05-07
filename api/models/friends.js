@@ -12,7 +12,7 @@ const User = require('../models/neo4j/user');
   var seen = {};
   var ret_arr = [];
   for (var i = 0; i < arr.length; i++) {
-      if (!(arr[i]['title'] in seen) || !(arr[i]['username'] in seen)) {
+      if ((!(arr[i]['title'] in seen) || !(arr[i]['username'] in seen)) && (arr[i]['username'] || arr[i]['title'])) {
           ret_arr.push(arr[i]);
           seen[arr[i]['title']] = true;
           seen[arr[i]['username']] = true;
@@ -29,7 +29,7 @@ const User = require('../models/neo4j/user');
     result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('m'), r.get('r'))));
     // for (var i = 0; i < arr.length; i++) {
     // result.friends = neo4jResult.records.map(r => new User(r.get('user')));
-    // console.log(result['friends'][0]);
+    console.log("FRIENDSSSSSSSSSSSs", result);
     return result;
   }
 
@@ -40,8 +40,8 @@ const User = require('../models/neo4j/user');
   // }
 // Get in the spotlight
 const getFriendsById = function (session, id) {
-    const query = 'MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User), (user2)-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
-    console.log(query);
+    const query = 'OPTIONAL MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User) OPTIONAL MATCH (user2)-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
+    console.log(query, id);
     return session.readTransaction(txc =>
         txc.run(query, {
           id : id

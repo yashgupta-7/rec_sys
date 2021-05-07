@@ -85,6 +85,7 @@ function manyMoviesCross(neo4jResult) {
   const result = {};
   result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie')))).slice(1, 6);
   result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book')))).slice(1, 6);
+  result.genres = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('genre')))).slice(1, 6);
   return result;
 }
 
@@ -112,9 +113,10 @@ const getById = function (session, movieId, userId) {
   [    'MATCH (movie {id: $movieId})',
       // '(movie:Movie OR movie:Book)',
       'OPTIONAL MATCH (movie)<-[r:ACTED_IN]-(a:Person)',
-    'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie WITH movie, a, r, related_movie',
+    'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie',
     'OPTIONAL MATCH (movie)-[:HAS_GENRE]->(genre:Genre)',
-    'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie WITH movie, genre, related_book, a, r, related_movie',
+    'OPTIONAL MATCH (related_movie2:Movie)-->(genre:Genre) WHERE related_movie2 <> movie',
+    'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie',
     'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {username: $userId})',
     'OPTIONAL MATCH (movie)<-[:DIRECTED]-(d:Person)',
     'OPTIONAL MATCH (movie)<-[:PRODUCED]-(p:Person)',
@@ -122,7 +124,7 @@ const getById = function (session, movieId, userId) {
     'WITH DISTINCT movie,',
     'my_rated,',
     'genre, d, p, w, a, r,',
-    'related_movie, ',
+    'related_movie, related_movie2,',
     'related_book,',
     'count(related_movie) AS countRelated_movie, count(related_book) AS countRelated_book',
     'ORDER BY countRelated_book DESC, countRelated_movie DESC',
@@ -133,7 +135,7 @@ const getById = function (session, movieId, userId) {
     'collect(DISTINCT p) AS producers,',
     'collect(DISTINCT w) AS writers,',
     'collect(DISTINCT{ name:a.name, id:a.id, poster_image:a.poster, role:r.role}) AS actors,',
-    'collect(DISTINCT related_movie)[..3] AS related_movie,',
+    'collect(DISTINCT related_movie)[..3] + collect(DISTINCT related_movie2)[..3] AS related_movie,',
     'collect(DISTINCT related_book)[..3]  AS related_book,',
     'collect(DISTINCT genre) AS genres',
   ].join('\n');
@@ -141,9 +143,10 @@ const getById = function (session, movieId, userId) {
     query = [    'MATCH (movie {id: $movieId})',
     // '(movie:Movie OR movie:Book)',
     'OPTIONAL MATCH (movie)<-[r:ACTED_IN]-(a:Person)',
-  'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie WITH movie, a, r, related_movie',
+  'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie',
   'OPTIONAL MATCH (movie)-[:HAS_GENRE]->(genre:Genre)',
-  'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie WITH movie, genre, related_book, a, r, related_movie',
+  'OPTIONAL MATCH (related_movie2:Movie)-->(genre:Genre) WHERE related_movie2 <> movie',
+  'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie',
   'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {username: $userId})',
   'OPTIONAL MATCH (movie)<-[:DIRECTED]-(d:Person)',
   'OPTIONAL MATCH (movie)<-[:PRODUCED]-(p:Person)',
@@ -151,7 +154,7 @@ const getById = function (session, movieId, userId) {
   'WITH DISTINCT movie,',
   'my_rated,',
   'genre, d, p, w, a, r,',
-  'related_movie, ',
+  'related_movie, related_movie2,',
   'related_book,',
   'count(related_movie) AS countRelated_movie, count(related_book) AS countRelated_book',
   'ORDER BY countRelated_book DESC, countRelated_movie DESC',
@@ -162,7 +165,7 @@ const getById = function (session, movieId, userId) {
   'collect(DISTINCT p) AS producers,',
   'collect(DISTINCT w) AS writers,',
   'collect(DISTINCT{ name:a.name, id:a.id, poster_image:a.poster, role:r.role}) AS actors,',
-  'collect(DISTINCT related_movie)[..3] AS related_movie,',
+  'collect(DISTINCT related_movie)[..3] + collect(DISTINCT related_movie2)[..3] AS related_movie,',
   'collect(DISTINCT related_book)[..3]  AS related_book,',
   'collect(DISTINCT genre) AS genres',
 ].join('\n');
@@ -191,9 +194,10 @@ const getByName = function (session, movieId, userId) {
   [    'MATCH (movie {title: $movieId})',
       // '(movie:Movie OR movie:Book)',
       'OPTIONAL MATCH (movie)<-[r:ACTED_IN]-(a:Person)',
-    'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie WITH movie, a, r, related_movie',
+    'OPTIONAL MATCH (related_movie:Movie)<--(a:Person) WHERE related_movie <> movie',
     'OPTIONAL MATCH (movie)-[:HAS_GENRE]->(genre:Genre)',
-    'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie WITH movie, genre, related_book, a, r, related_movie',
+    'OPTIONAL MATCH (related_movie2:Movie)-->(genre:Genre) WHERE related_movie2 <> movie',
+    'OPTIONAL MATCH (related_book:Book)-->(genre:Genre) WHERE related_book <> movie',
     'OPTIONAL MATCH (movie)<-[my_rated:RATED]-(me:User {username: $userId})',
     'OPTIONAL MATCH (movie)<-[:DIRECTED]-(d:Person)',
     'OPTIONAL MATCH (movie)<-[:PRODUCED]-(p:Person)',
@@ -201,7 +205,7 @@ const getByName = function (session, movieId, userId) {
     'WITH DISTINCT movie,',
     'my_rated,',
     'genre, d, p, w, a, r,',
-    'related_movie, ',
+    'related_movie, related_movie2,',
     'related_book,',
     'count(related_movie) AS countRelated_movie, count(related_book) AS countRelated_book',
     'ORDER BY countRelated_book DESC, countRelated_movie DESC',
@@ -212,7 +216,7 @@ const getByName = function (session, movieId, userId) {
     'collect(DISTINCT p) AS producers,',
     'collect(DISTINCT w) AS writers,',
     'collect(DISTINCT{ name:a.name, id:a.id, poster_image:a.poster, role:r.role}) AS actors,',
-    'collect(DISTINCT related_movie)[..3] AS related_movie,',
+    'collect(DISTINCT related_movie)[..3] + collect(DISTINCT related_movie2)[..3] AS related_movie,',
     'collect(DISTINCT related_book)[..3]  AS related_book,',
     'collect(DISTINCT genre) AS genres',
   ].join('\n');
@@ -257,9 +261,15 @@ const getInSpotlight = function (session) {
   const query = [
     // 'MATCH (movie:Movie) RETURN movie'
     // 'MATCH (m1:Movie), p=()-[r:RATED_MOVIE]->(m2:Movie) where m1.id = m2.id with avg(r.rating) as ar, m1 as movie RETURN movie order by ar desc LIMIT 5'
+    // 'MATCH (m1:Movie), p=()-[r:RATED]->(m2:Movie), \
+    // (b1:Book), pb=()-[rb:RATED]->(b2:Book) \
+    // where (m1.id = m2.id and b1.id = b2.id) with avg(r.rating) as ar, avg(rb.rating) as arb, m1 as movie, b1 as book RETURN movie, book order by ar desc, arb desc'
     'MATCH (m1:Movie), p=()-[r:RATED]->(m2:Movie), \
-    (b1:Book), pb=()-[rb:RATED]->(b2:Book) \
-    where (m1.id = m2.id and b1.id = b2.id) with avg(r.rating) as ar, avg(rb.rating) as arb, m1 as movie, b1 as book RETURN movie, book order by ar desc, arb desc'
+(b1:Book), pb=()-[rb:RATED]->(b2:Book), \
+(g1:Genre), pg=()-[lg:LIKES_GENRE]->(g2:Genre) \
+where (m1.id = m2.id and b1.id = b2.id and g1.id = g2.id) \
+with avg(r.rating) as ar, avg(rb.rating) as arb, count(lg) as clg, m1 as movie, \
+b1 as book, g1 as genre RETURN movie, book, genre order by ar desc, arb desc, clg desc'
   ].join('\n');
   // console.log(query);
   return session.readTransaction(txc =>
@@ -399,6 +409,7 @@ function filterRated(neo4jResult) {
 }
 
 const getRatedByUser = function (session, userId) {
+  console.log("rated result", userId);
   return session.readTransaction(txc =>
     txc.run(
       // 'MATCH (:User {username: $userId})-[rated:RATED]->(movie:Movie) \
@@ -409,6 +420,7 @@ const getRatedByUser = function (session, userId) {
       {userId: userId}
     )
   ).then(result => {
+    console.log("rated result", result);
     return filterRated(result); //result.records.map(r => new Movie(r.get('movie'), r.get('movie_rating')))
   });
 };
