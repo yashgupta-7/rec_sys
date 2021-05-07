@@ -10,9 +10,27 @@ import {connect} from 'react-redux';
 
 
 class Genre extends React.Component {
+  constructor() {
+    super();
+    this.change_Like = this.change_Like.bind(this);
+    // this.change_Follow = this.change_Follow.bind(this);
+    // this.call_getFollowCheck=this.call_getFollowCheck.bind(this);
+    // this.getFollow = this.getFollow.bind(this);
+    // this.getFollowCheck = this.getFollowCheck(this);
+    this.state = {
+      reload : "sf",
+      // myname: '',
+      // genre_name: '',
+     
+    };
+  }
   componentDidMount() {
     var {id} = this.props.match.params;
+    console.log("genre :",id);
     this.props.getGenre(id);
+    this.props.getLikeGenreCheck(id);
+    // this.props.getLikeGenre(id,1);
+    // console.log("genre return value",this.state.likeGenre);
   }
 
   componentDidUpdate(prevProps) {
@@ -21,6 +39,9 @@ class Genre extends React.Component {
 
       var {id} = this.props.match.params;
       this.props.getGenre(id);
+      this.props.getLikeGenreCheck(id);
+     
+      // console.log("genre return value",this.state.likeGenre);
     }
   }
 
@@ -29,16 +50,40 @@ class Genre extends React.Component {
   }
 
   render() {
-    var {isFetching, movie, rateMovie, deleteMovieRating, profile, genre} = this.props;
+    setTimeout(() => {
+      this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
+      console.log("setTimeout setState");
+      this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
+    }, 10)
+    var {id} = this.props.match.params;
+    // var {profile} = this.props.profile;
+    var {isFetching, movie, rateMovie, deleteMovieRating, profile, genre,likeGenre} = this.props;
     console.log("MOVIEEEEEEEEEEEEEEEE", movie, genre, deleteMovieRating, genre['genres']);
     var page_link = window.location.href;
     var Genre = page_link.substr(page_link.lastIndexOf('/')+1); //genre['genres'][0]['name']; 
     console.log(Genre);
+    
+    // if (!profile) {
+    //   return null;
+    // }
+    console.log("genre return value",likeGenre, this.props.likeGenre);
     return (
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
         {/* ////////////////////////////////////////////////////////// */}
         <div className="nt-home-by-genre">
+        <div className="row text-center">
+              <button className="btn"
+                      type="submit"
+                      name="submit-login"
+                      onClick={this.change_Like}
+                      // disabled={!canSubmit}
+                      >
+                {/* {f ? <h5>UnFollow ${isFollow} </h5> :<h5>Follow  ${isFollow}</h5>} */}
+                {likeGenre[0]=="0" ? <h5>Like </h5> :<h5>UnLike</h5>} {Genre}
+                {/* {isFollow[0]=="0" ? "heyaa" : "yoy"} */}
+              </button>
+        </div>
         <h3 className="nt-home-header">{Genre} Movies</h3>
         <div className="nt-box">
           <div>
@@ -247,6 +292,36 @@ class Genre extends React.Component {
       </span>);
     });
   }
+  change_Like(event) {
+    // var {isFetching, movie, rateMovie, deleteMovieRating, userd,isFollow} = this.props;
+    var {isFetching, movie, rateMovie, deleteMovieRating, profile, genre,likeGenre} = this.props;
+    var {id} = this.props.match.params;
+    console.log("change_Follow ",likeGenre);
+   
+    var flag= likeGenre[0]=="0" ? 1 : 0;
+
+    this.props.getLikeGenre(id,flag);
+    console.log("Like genre afterwards",likeGenre,flag);
+    setTimeout(() => {
+      this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
+      console.log("setTimeout setState");
+      this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
+    }, 10)
+    this.setState({reload : "rell"});
+
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+    window.location.href = window.location.href;
+  }
 }
 Genre.displayName = 'Genre';
 
@@ -254,6 +329,7 @@ function mapStateToProps(state) {
   return {
     movie: state.movies.detail,
     genre: state.movies.detailg,
+    likeGenre: state.movies.likeGenre,
     isFetching: state.movies.isFetching,
     profile: _.get(state, 'profile.profile')
   };

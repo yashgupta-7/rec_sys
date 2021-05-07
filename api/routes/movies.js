@@ -473,3 +473,83 @@ exports.getRecommendedMovies = function (req, res, next) {
       .catch(next);
   })
 };
+
+
+
+/**
+ * @swagger
+ * /api/v0/movies/likegenre/{id}/{f}:
+ *   get:
+ *     tags:
+ *     - movies
+ *     description: Like a genre
+ *     summary: Like a genre
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: id of the genre
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: f
+ *         description: boolean
+ *         in: path
+ *         required: true
+ *         type: integer
+ *       - name: Authorization
+ *         in: header
+ *         type: string
+ *         required: true
+ *         description: Token (token goes here)
+ *     responses:
+ *       200:
+ *         description: movie rating saved
+ *       400:
+ *         description: Error message(s)
+ *       401:
+ *         description: invalid / missing authentication
+ */
+ exports.likeGenre = function (req, res, next) {
+
+    Movies.likeGenre(dbUtils.getSession(req), req.params.id, req.user.username,req.params.f)
+      .then(response => writeResponse(res, {}))
+      .catch(next);
+};
+
+
+/**
+ * @swagger
+ * /api/v0/movies/likegenrecheck/{id}:
+ *   get:
+ *     tags:
+ *     - movies
+ *     description: Like a genre check
+ *     summary: Like a genre check
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: id of the genre
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: Authorization
+ *         in: header
+ *         type: string
+ *         required: true
+ *         description: Token (token goes here)
+ *     responses:
+ *       200:
+ *         description: movie rating saved
+ *       400:
+ *         description: Error message(s)
+ *       401:
+ *         description: invalid / missing authentication
+ */
+ exports.likeGenreCheck = function (req, res, next) {
+  
+  Movies.likeGenreCheck(dbUtils.getSession(req), req.params.id, req.user.username)
+      .then(response => writeResponse(res, response))
+      .catch(next);
+};

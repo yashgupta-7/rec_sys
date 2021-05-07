@@ -83,6 +83,18 @@ export default class MoviesApi {
   // ]);
   }
 
+  static getLikeGenreCheck(id) {
+    var res=axios.get(`${apiBaseURL}/movies/likegenrecheck/${id}`);
+    console.log("IN axios " , res);
+    return res;
+    // return axios.get(`${apiBaseURL}/movies/likegenrecheck/${id}`);
+  } 
+
+  static getLikeGenre(id,f) {
+    return axios.get(`${apiBaseURL}/movies/likegenre/${id}/${f}`);
+  }
+
+
   static rateMovie(id, rating) {
     return axios.post(`${apiBaseURL}/movies/${id}/rate`, {rating});
   }

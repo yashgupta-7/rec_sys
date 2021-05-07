@@ -82,6 +82,9 @@ api.get("/friends/:id", routes.friends.getFriendsById);
 api.get("/friends/:u1/:u2/:f", routes.friends.changeFriends);
 api.get("/friends/:u1/:u2", routes.friends.findIfFriend);
 
+api.get("/movies/likegenre/:id/:f", routes.movies.likeGenre);
+api.get("/movies/likegenrecheck/:id", routes.movies.likeGenreCheck);
+
 // api.get("/movies/reco/:name", routes.movies.getRecoMoviesByName);
 api.get("/movies/recommended", routes.movies.getRecommendedMovies);
 api.get("/movies/rated", routes.movies.findMoviesRatedByMe);

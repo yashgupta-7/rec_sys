@@ -474,6 +474,47 @@ const getRecoByName = function (session, userId) {
   ).then(result => manyMovies(result));
 };
 
+
+const likeGenre = function (session, id, userId, f) {
+  var query=""
+  if (f==1){
+    query = 'MATCH (u1: User {username: $userId}), (g : Genre {name : $id})' + 
+    'CREATE (u1)-[:LIKES_GENRE]->(g)';
+    console.log("Hey_if genre",userId,id,f);
+  }
+  else{
+    query = 'MATCH (u1: User {username: $userId})-[f:LIKES_GENRE]->(g : Genre {name : $id}) ' + 
+     'DELETE f';
+     console.log("Hey_else genre",userId,id,f);
+  }
+  // console.log(query,us1,us2,f);
+  return session.writeTransaction(txc =>
+      txc.run(query, {
+        userId: userId,
+        id: id,
+        f: f
+      })
+    );
+    // .then(result => manyUsers(result))
+};
+
+const likeGenreCheck = function (session, id, userId) {
+  const query= 'MATCH p=(u1: User {username: $userId})-[f:LIKES_GENRE]->(g : Genre {name : $id}) RETURN count(f) as c'
+  console.log("LIKES GENRE CHECK",query,userId,id);
+  return session.readTransaction(txc =>
+      txc.run(query, {
+        userId: userId,
+        id: id
+      })
+    ).then(result => {
+      console.log("like genre check query ",result.records,result.records.map(r => r.get('c')));
+      return result.records.map(r => r.get('c'))
+     });
+};
+
+
+
+
 // export exposed functions
 module.exports = {
   getAll: getAll,
@@ -490,5 +531,7 @@ module.exports = {
   deleteRating: deleteRating,
   getRatedByUser: getRatedByUser,
   getRecommended: getRecommended,
-  getRecoByName: getRecoByName
+  getRecoByName: getRecoByName,
+  likeGenre: likeGenre,
+  likeGenreCheck: likeGenreCheck
 };

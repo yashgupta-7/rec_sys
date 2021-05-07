@@ -9,7 +9,8 @@ const initialState = {
   detail: null,
   detailg: "hello",
   detailu: "detailu",
-  isFollow: "default_follow"
+  isFollow: "default_follow",
+  likeGenre : "deafult_genre"
 };
 
 export default function movies(state = initialState, action) {
@@ -95,10 +96,34 @@ export default function movies(state = initialState, action) {
       };
     case Types.FOLLOWCHECK_DETAIL_GET_SUCCESS:
       return  {
+       
         ...state,
         isFetching: false,
         isFollow: action.response
       };
+      case Types.LIKEGENRE_DETAIL_GET_REQUEST:
+        return  {
+          ...state,
+          isFetching: true
+        };
+    case Types.LIKEGENRECHECK_DETAIL_GET_REQUEST:
+          return  {
+            ...state,
+            isFetching: true
+          };
+    case Types.LIKEGENRE_DETAIL_GET_SUCCESS:
+      return  {
+        ...state,
+        isFetching: false
+      };
+      case Types.LIKEGENRECHECK_DETAIL_GET_SUCCESS:
+        console.log("LIKE GENRE CHECK RESPON",action.response);
+        return  {
+          
+          ...state,
+          isFetching: false,
+          likeGenre: action.response
+        };
     default:
       return state;
   }

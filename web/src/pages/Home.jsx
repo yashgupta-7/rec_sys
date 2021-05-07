@@ -98,6 +98,7 @@ class Home extends React.Component {
     var isLoggedIn = !!_.get(props, 'auth.token');
     var isAdmin = name === "admin";
 
+    console.log("Features MOVIESSSSS",movies.featured);
     return (
       <div className="nt-home-featured">
       {isLoggedIn ?

@@ -15,6 +15,8 @@ export default function* movieFlow() {
     takeEvery(Types.MOVIE_DELETE_RATING, deleteRating),
     takeEvery(Types.FOLLOW_DETAIL_GET_REQUEST, getFollow),
     takeEvery(Types.FOLLOWCHECK_DETAIL_GET_REQUEST, getFollowCheck),
+    takeEvery(Types.LIKEGENRE_DETAIL_GET_REQUEST, getLikeGenre),
+    takeEvery(Types.LIKEGENRECHECK_DETAIL_GET_REQUEST, getLikeGenreCheck),
   ]);
 }
 
@@ -98,6 +100,29 @@ function* getFollowCheck(action) {
   try {
     const response = yield call(MoviesApi.getFollowCheck, u1,u2);
     yield put(Actions.getFollowCheckSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getFriendsFailure(error));
+  }
+}
+
+
+function* getLikeGenre(action) {
+  var {id,f} = action;
+  try {
+    const response = yield call(MoviesApi.getLikeGenre,id,f);
+    yield put(Actions.getLikeGenreSuccess(response));
+  }
+  catch (error) {
+    yield put(Actions.getFriendsFailure(error));
+  }
+}
+
+function* getLikeGenreCheck(action) {
+  var {id} = action;
+  try {
+    const response = yield call(MoviesApi.getLikeGenreCheck, id);
+    yield put(Actions.getLikeGenreCheckSuccess(response));
   }
   catch (error) {
     yield put(Actions.getFriendsFailure(error));

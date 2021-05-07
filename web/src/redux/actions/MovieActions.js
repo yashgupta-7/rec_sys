@@ -77,6 +77,13 @@ export function getFollowCheck(u1,u2) {
   return {type: Types.FOLLOWCHECK_DETAIL_GET_REQUEST, u1,u2};
 }
 
+export function getLikeGenre(id,f) {
+  return {type: Types.LIKEGENRE_DETAIL_GET_REQUEST, id,f};
+}
+export function getLikeGenreCheck(id) {
+  return {type: Types.LIKEGENRECHECK_DETAIL_GET_REQUEST, id};
+}
+
 export function getMovieSuccess(response) {
   return {type: Types.MOVIE_DETAIL_GET_SUCCESS, response};
 }
@@ -93,6 +100,13 @@ export function getFollowSuccess(response) {
 }
 export function getFollowCheckSuccess(response) {
   return {type: Types.FOLLOWCHECK_DETAIL_GET_SUCCESS, response};
+}
+
+export function getLikeGenreSuccess(response) {
+  return {type: Types.LIKEGENRE_DETAIL_GET_SUCCESS, response};
+}
+export function getLikeGenreCheckSuccess(response) {
+  return {type: Types.LIKEGENRECHECK_DETAIL_GET_SUCCESS, response};
 }
 
 export function getMovieFailure(error) {
