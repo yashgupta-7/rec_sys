@@ -60,7 +60,8 @@ class Profile extends React.Component {
         </div>
 
         <div className="row">
-          <div className="small-12 columns">
+        <div className="small-12 medium-8 columns nt-movie-main"> 
+
             <div>
               <div>
                 <h3>My rated</h3>
@@ -119,14 +120,17 @@ class Profile extends React.Component {
                 null
               }
             </div>
+          {/* </div> */}
           </div>
-        </div>
+        {/* </div> */}
 
-        <div className="row">
-          <div className="small-12 columns">
+        {/* <div className="row">
+         */}
+         <div className="small-12 medium-4 columns nt-movie-main"> 
+          {/* <div className="small-12 columns"> */}
             <div>
               <div>
-              <br></br><br></br> <h3>Recommended for me </h3>
+              <h3>Recommended for me </h3>
               </div>
               {
                 !_.isEmpty(recommendedMovies) ?
@@ -166,10 +170,12 @@ class Profile extends React.Component {
               
             </div>
             
-          </div>
+          {/* </div> */}
+        </div>
         </div>
 
         <div className="row">      
+        <div className="small-12 medium-8 columns nt-movie-main"> 
                 <input name = "search_by_username"
                 type="text"
                        placeholder="Search by username"
@@ -177,7 +183,10 @@ class Profile extends React.Component {
                        value={username}
                        onChange={this.handleChange_username}
                        />
+                       </div>
+                       <div className="small-12 medium-4 columns nt-movie-main"> 
                  <Link to={`/user/${this.state.username}/${profile.username}`} className="button ba-default-btn">Search by UserName</Link>
+          </div>
           </div>
        
       </div>
