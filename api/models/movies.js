@@ -69,7 +69,7 @@ function remove_duplicates_safe(arr) {
   var seen = {};
   var ret_arr = [];
   for (var i = 0; i < arr.length; i++) {
-      if (!(arr[i]['title'] in seen) || !(arr[i]['name'] in seen)) {
+      if ((!(arr[i]['title'] in seen) || !(arr[i]['name'] in seen)) && (arr[i]['title'] || arr[i]['name'])) {
           ret_arr.push(arr[i]);
           seen[arr[i]['title']] = true;
           seen[arr[i]['name']] = true;
@@ -403,8 +403,29 @@ const deleteRating = function (session, movieId, userId) {
 function filterRated(neo4jResult) {
   // console.log("RESSS", neo4jResult);
   const result = {};
-  result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie'), r.get('movie_rating'))));
+  result.movies= remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie'), r.get('movie_rating'))));
   result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book'), r.get('book_rating'))));
+  console.log(result);
+  return result;
+}
+
+function filterRated_recommended(neo4jResult) {
+  // console.log("RESSS", neo4jResult);
+  const result = {};
+  var seen={}
+  result.movies2 = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie_genre'), r.get('movie_rating'))));
+  result.movies= remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie'), r.get('movie_rating'))));
+  for (var i = 0; i < result.movies.length; i++) {
+      seen[result.movies[i]['title']]=true;
+  }
+  console.log(seen);
+  for (var i = 0; i < result.movies2.length; i++) {
+    if(!seen[result.movies2[i]['title']])
+      result.movies.push(result.movies2[i]);
+  }
+  // result.movies= result.movies1+result.movies2;
+  result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book'), r.get('book_rating'))));
+  console.log(result);
   return result;
 }
 
@@ -449,15 +470,24 @@ const getRecommended = function (session, userId) {
       // 'MATCH (:User {username: $userId})-[rated:RATED]->(movie:Movie) \
       //  RETURN DISTINCT movie, rated.rating as my_rating',
       // {userId: userId}
+      // 'MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
+      // OPTIONAL MATCH (u)-[r6:RATED]->(m4:Book) \
+      // WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3 AND (r6.rating > 3 OR r6 is NULL) AND NOT (me)-[:RATED]->(m2) \
+      // RETURN distinct m2 AS movie, m4 as book, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
+      // ORDER BY count DESC \
+      // LIMIT 10',
       'MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
-      OPTIONAL MATCH (u)-[r6:RATED]->(m4:Book) \
-      WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3 AND (r6.rating > 3 OR r6 is NULL) AND NOT (me)-[:RATED]->(m2) \
-      RETURN distinct m2 AS movie, m4 as book, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
-      ORDER BY count DESC \
-      LIMIT 10',
+      WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3  AND NOT (me)-[:RATED]->(m2) \
+           OPTIONAL MATCH (u)-[r6:RATED]->(m4:Book) \
+            where  (r6.rating > 3 OR r6 is NULL) \
+            optional match (me)-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
+            where r5.rating > 3 and m_genre <> m2 \
+           RETURN distinct m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
+           ORDER BY count DESC \
+           LIMIT 10',
       {userId: userId}
     )
-  ).then(result => filterRated(result));
+  ).then(result => filterRated_recommended(result));
 };
 
 //
