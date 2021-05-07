@@ -489,7 +489,7 @@ const getRecommended = function (session, userId) {
            OPTIONAL MATCH (me10:User {username: $userId} )-[r10:RATED]->(m10:Movie)<-[r20:RATED]-(u10:User)-[r30:RATED]->(m4:Book) \
             where  (r30.rating >= 3 OR r30 is NULL) \
             optional match (me2:User {username: $userId})-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
-            where r5.rating > 3 and m_genre <> m2 \
+            where r5.rating > 3 and m_genre <> m2 and NOT (me2)-[:RATED]->(m_genre) \
             OPTIONAL MATCH (me3:User {username: $userId})-[:FOLLOWING]->(:User)-[r9:RATED]->(m_follow) where r9.rating >= 3 \
            RETURN distinct m_follow, m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
            ORDER BY count DESC \
