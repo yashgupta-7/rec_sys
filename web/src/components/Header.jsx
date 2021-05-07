@@ -58,6 +58,7 @@ class Header extends React.Component {
 
   logout() {
     this.props.dispatch(logout());
+    window.location.href = "http://localhost:3001/"
   }
 }
 
