@@ -107,7 +107,7 @@ class Home extends React.Component {
       <div className="small-12 medium-8 columns nt-movie-main">
                 <input name = "search_by_name"
                 type="text"
-                       placeholder="Search by movie name*"
+                       placeholder="Search by movie/book name*"
                        required
                        value={movie_name}
                        onChange={this.handleChange_movie}

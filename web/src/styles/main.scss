@@ -26,6 +26,28 @@
   border-radius: .5rem;
   padding: .2rem;
   background: #ffffff;
+  // max-width: 3cm;
+
+  &-title {
+    padding: .5rem;
+    color: #ba0000;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  &-row {
+    padding: .5rem;
+    margin: 0;
+  }
+}
+
+.nt-box-small {
+  border: 1px solid #ffffff;
+  border-radius: .5rem;
+  padding: .2rem;
+  background: #ffffff;
+  max-width: 3cm;
 
   &-title {
     padding: .5rem;

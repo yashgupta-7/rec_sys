@@ -84,7 +84,7 @@ class Genre extends React.Component {
                 {/* {isFollow[0]=="0" ? "heyaa" : "yoy"} */}
               </button>
         </div>
-        <h3 className="nt-home-header">{Genre} Movies</h3>
+        <h3 className="nt-home-header">{Genre} Movies and Books</h3>
         <div className="nt-box">
           <div>
             {/* {name} */}
@@ -95,7 +95,7 @@ class Genre extends React.Component {
             return (
               // key={f.id}
               <li > 
-                <div className="nt-box">
+                <div className="nt-box-small">
                 <Link to={`/entity/${f.id}`}>
                   <img src={f.posterImage} alt="" />
                   <h5>

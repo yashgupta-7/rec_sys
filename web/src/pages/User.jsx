@@ -97,10 +97,10 @@ class User extends React.Component {
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
         {/* {this.call_getFollowCheck();} */}
-        <div>
+        <div className="nt-box-title">
             Profile Page of user : {username}
           </div>
-        <div className="nt-box">
+        <div className="nt-box-title">
         <div className="row text-center">
               <button className="btn"
                       type="submit"
@@ -140,9 +140,9 @@ class User extends React.Component {
           {/* </Carousel> */}
         </div>
 
-        <div className="nt-box">
+        <div className="nt-box-title">
           <div>
-            Rated Movies
+            <center>Rated Entities</center>
           </div>
           {/* <Carousel> */}
           <ul>
@@ -150,11 +150,11 @@ class User extends React.Component {
             return (
               // key={f.id}
               <li > 
-                <div className="nt-box">
+                <div className="nt-box-small">
                 <Link to={`/entity/${f.id}`}>
                   <img src={f.posterImage} alt="" />
                   <h5>{f.title}
-                  {f.myRating.properties.rating}
+                  {/* {f.myRating.properties.rating} */}
                   </h5>
                   <UserRating movieId={f.id}
                                       savedRating={f.myRating.properties.rating}

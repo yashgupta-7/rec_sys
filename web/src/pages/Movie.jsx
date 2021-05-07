@@ -56,8 +56,8 @@ class Movie extends React.Component {
                    <span>{movie.type}</span> 
                   </p>
                   <p className="nt-box-row">
-                  <strong>Tagline: </strong>
-                   <span>{movie.tagline}</span> 
+                  <strong>Summary: </strong>
+                   <span>{movie.summary}</span> 
                   </p>
                 
         
@@ -197,7 +197,7 @@ class Movie extends React.Component {
     // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", genres);
     return genres.map((g, i) => {
       return (<span key={g.id}>
-        {g.name}
+        <Link to={`/genre/${g.name}`}>{g.name}</Link>
         {i < genres.length - 1 ? <span>, </span> : null}
       </span>);
     });

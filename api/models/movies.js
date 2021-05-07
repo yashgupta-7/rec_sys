@@ -92,8 +92,8 @@ function manyMoviesCross(neo4jResult) {
 function manyGenres(neo4jResult) {
   console.log("RESSS", neo4jResult);
   const result = {};
-  result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie'))));
-  result.genres = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('genre'))));
+  result.movies = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('movie')))).slice(0, 6);
+  result.genres = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('genre')))).slice(0, 6);
   // console.log("RESULT", result);
   return result;
 }
@@ -320,8 +320,8 @@ const getByGenreName = function(session, genreId) {
   console.log("genreeeeeeeeeeeee");
   const query =
     // 'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE genre.name = $genreId RETURN movie, genre;';
-    'match (movie:Movie)-[:HAS_GENRE]->(genre:Genre), (genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre)'+
-    'where genre.name = $genreId  with count(u1) as c, movie, g2 as genre return movie, genre order by c desc;'
+    'match (u:User)-[r3:RATED]->(movie)-[:HAS_GENRE]->(genre:Genre), (genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre)'+
+    'where genre.name = $genreId  with count(u1) as c, count(r3) as c2, movie, g2 as genre return movie, genre order by c2 desc, c desc;'
 //     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
 // WHERE genre.name = 'Action'
 // RETURN movie;
@@ -425,6 +425,7 @@ function filterRated_recommended(neo4jResult) {
   }
   // result.movies= result.movies1+result.movies2;
   result.books = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('book'), r.get('book_rating'))));
+  result.m_follow = remove_duplicates_safe(neo4jResult.records.map(r => new Movie(r.get('m_follow'), r.get('book_rating'))));
   console.log(result);
   return result;
 }
@@ -476,13 +477,14 @@ const getRecommended = function (session, userId) {
       // RETURN distinct m2 AS movie, m4 as book, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
       // ORDER BY count DESC \
       // LIMIT 10',
-      'MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
-      WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3  AND NOT (me)-[:RATED]->(m2) \
-           OPTIONAL MATCH (u)-[r6:RATED]->(m4:Book) \
-            where  (r6.rating > 3 OR r6 is NULL) and NOT (me)-[:RATED]->(m4) \
-            optional match (me)-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
+      'OPTIONAL MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
+      WHERE  r1.rating >= 3 AND r2.rating >= 3 AND r3.rating >= 3  AND NOT (me)-[:RATED]->(m2) \
+           OPTIONAL MATCH (me10:User {username: $userId} )-[r10:RATED]->(m10:Movie)<-[r20:RATED]-(u10:User)-[r30:RATED]->(m4:Book) \
+            where  (r30.rating >= 3 OR r30 is NULL) \
+            optional match (me2:User {username: $userId})-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
             where r5.rating > 3 and m_genre <> m2 \
-           RETURN distinct m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
+            OPTIONAL MATCH (me3:User {username: $userId})-[:FOLLOWING]->(:User)-[r9:RATED]->(m_follow) where r9.rating >= 3 \
+           RETURN distinct m_follow, m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
            ORDER BY count DESC \
            LIMIT 10',
       {userId: userId}

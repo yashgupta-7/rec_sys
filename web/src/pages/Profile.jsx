@@ -162,6 +162,20 @@ class Profile extends React.Component {
                         </div>
                       );
                     })}
+                    <h6>Friends are Enjoying</h6>
+                    {/* {recommendedMovies['m_follow'].length != 0 ? */}
+                      {recommendedMovies['mFollow'].map(m => {
+                        return (
+                          <div key={m.id}>
+                            <Link to={`/entity/${m.id}`}>
+                              {/* <img src={m.posterImage} className="nt-movie-poster" float="left" alt="*" /> */}
+                            </Link>
+                            <div>
+                              <Link to={`/entity/${m.id}`}>{m.title}</Link>
+                            </div>
+                          </div>
+                        );
+                      })} 
                     </div>
                   // </Carousel>
                   :
