@@ -317,12 +317,19 @@ const getByGenre = function(session, genreId) {
 
 //
 const getByGenreName = function(session, genreId) {
-  console.log("genreeeeeeeeeeeee");
+  console.log("GENREEEE available");
   const query =
+  'match (movie)-[:HAS_GENRE]->(genre:Genre) where genre.name = $genreId \
+optional  match (u:User)-[r3:RATED]->(movie)-[:HAS_GENRE]->(genre:Genre), \
+(genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre) \
+where genre.name = $genreId  with count(u1) as c, count(r3) as c2, movie, g2 as genre \
+return movie, genre order by c2 desc, c desc;'
     // 'MATCH (movie:Movie)-[:HAS_GENRE_MOVIE ]->(genre:Genre) WHERE genre.name = $genreId RETURN movie, genre;';
-    'match (u:User)-[r3:RATED]->(movie)-[:HAS_GENRE]->(genre:Genre), (genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre)'+
-    'where genre.name = $genreId  with count(u1) as c, count(r3) as c2, movie, g2 as genre return movie, genre order by c2 desc, c desc;'
-//     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
+    
+    // 'match (u:User)-[r3:RATED]->(movie)-[:HAS_GENRE]->(genre:Genre), (genre:Genre)<-[r2:LIKES_GENRE]-(u1)-[r:LIKES_GENRE]->(g2: Genre)'+
+    // 'where genre.name = $genreId  with count(u1) as c, count(r3) as c2, movie, g2 as genre return movie, genre order by c2 desc, c desc;'
+
+    //     MATCH (movie:Movie)-[:HAS_GENRE]->(genre:Genre)
 // WHERE genre.name = 'Action'
 // RETURN movie;
     // 'MATCH (movie:Movie)-[:IN_GENRE]->(genre)',
@@ -334,7 +341,7 @@ const getByGenreName = function(session, genreId) {
         genreId: genreId
       })
     ).then(result => {
-      // console.log("rrrrrrrrrrrrrrrr",result.records);
+      console.log("genre result",result.records);
       return manyGenres(result)
     });
 };
