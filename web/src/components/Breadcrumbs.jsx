@@ -10,7 +10,7 @@ export default class Breadcrumbs extends React.Component {
       <div>
       <ul className="breadcrumbs">
         <li><Link to="/" className={movie ? '' : 'current'}>Home</Link></li>
-        {
+        {/* {
           movie ?
             <li><Link to={`/entity/${movie.id}`} className="current">{movie.title}</Link></li>
             : null
@@ -19,7 +19,7 @@ export default class Breadcrumbs extends React.Component {
           person ?
             <li><Link to={`/person/${person.id}`} className="current">{person.name}</Link></li>
             : null
-        }
+        } */}
       </ul>
       </div>
       
