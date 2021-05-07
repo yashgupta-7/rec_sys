@@ -40,7 +40,8 @@ const User = require('../models/neo4j/user');
   // }
 // Get in the spotlight
 const getFriendsById = function (session, id) {
-    const query = 'OPTIONAL MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User) OPTIONAL MATCH (user2)-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
+    const query = 'optional MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User) optional match (user3:User {username: $id})-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
+    // 'OPTIONAL MATCH (user2:User {username: $id})-[p : FOLLOWING]->(user : User) OPTIONAL MATCH (user2)-[r:RATED]->(m:Movie) RETURN user, r, m LIMIT 5';
     console.log(query, id);
     return session.readTransaction(txc =>
         txc.run(query, {
