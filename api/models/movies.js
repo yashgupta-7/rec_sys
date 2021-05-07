@@ -435,8 +435,8 @@ const getRatedByUser = function (session, userId) {
     txc.run(
       // 'MATCH (:User {username: $userId})-[rated:RATED]->(movie:Movie) \
       //  RETURN DISTINCT movie, rated.rating as my_rating',
-      'MATCH (u:User {username: $userId})-[rated1:RATED]->(movie:Movie) \
-      OPTIONAL MATCH (u)-[rated2:RATED]->(book:Book) \
+      'Optional MATCH (u:User {username: $userId})-[rated1:RATED]->(movie:Movie) \
+      OPTIONAL MATCH (u2:User {username: $userId})-[rated2:RATED]->(book:Book) \
       RETURN DISTINCT movie, book, rated1.rating as movie_rating, rated2.rating as book_rating',
       {userId: userId}
     )
@@ -479,7 +479,7 @@ const getRecommended = function (session, userId) {
       'MATCH (me:User {username: $userId} )-[r1:RATED]->(m:Movie)<-[r2:RATED]-(u:User)-[r3:RATED]->(m2:Movie) \
       WHERE  r1.rating > 3 AND r2.rating > 3 AND r3.rating > 3  AND NOT (me)-[:RATED]->(m2) \
            OPTIONAL MATCH (u)-[r6:RATED]->(m4:Book) \
-            where  (r6.rating > 3 OR r6 is NULL) \
+            where  (r6.rating > 3 OR r6 is NULL) and NOT (me)-[:RATED]->(m4) \
             optional match (me)-[: LIKES_GENRE]->(g)<-[: HAS_GENRE]-(m_genre : Movie)<-[r5 : RATED]-()\
             where r5.rating > 3 and m_genre <> m2 \
            RETURN distinct m2 AS movie, m4 as book, m_genre as movie_genre, count(*) AS count, count(*) AS movie_rating, count(*) AS book_rating \
