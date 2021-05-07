@@ -89,16 +89,15 @@ class User extends React.Component {
     console.log("IsFollow value",isFollow,profile,f,this.state.doesFollow);
     // var text_disp = isFollow==="0" ? ""
     console.log("MOVIEEEEEEEEEEEEEEEE", this.props.match.params.username, userd, movie, deleteMovieRating);
-    if (!profile) {
+    if (!profile || !userd['userT']) {
       return null;
     }
-    
     return (
       <div className="nt-movie">
         {isFetching ? <Loading/> : null}
         {/* {this.call_getFollowCheck();} */}
         <div className="nt-box-title">
-            Profile Page of user : {username}
+            Profile Page of user {userd['userT'].length==0? "DOESNT EXIST" : ""} : {username}
           </div>
         <div className="nt-box-title">
         <div className="row text-center">

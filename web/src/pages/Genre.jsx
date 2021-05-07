@@ -63,9 +63,9 @@ class Genre extends React.Component {
     var Genre = page_link.substr(page_link.lastIndexOf('/')+1); //genre['genres'][0]['name']; 
     console.log(Genre);
     
-    // if (!profile) {
-    //   return null;
-    // }
+    if (!genre['movies']) {
+      return null;
+    }
     console.log("genre return value",likeGenre, this.props.likeGenre);
     return (
       <div className="nt-movie">
@@ -84,7 +84,7 @@ class Genre extends React.Component {
                 {/* {isFollow[0]=="0" ? "heyaa" : "yoy"} */}
               </button>
         </div>
-        <h3 className="nt-home-header">{Genre} Movies and Books</h3>
+        <h3 className="nt-home-header">{Genre} {genre['movies'].length==0? "DOESNT EXIST" : "Movies and Books"} </h3>
         <div className="nt-box">
           <div>
             {/* {name} */}
