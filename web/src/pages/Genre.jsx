@@ -50,11 +50,11 @@ class Genre extends React.Component {
   }
 
   render() {
-    setTimeout(() => {
-      this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
-      console.log("setTimeout setState");
-      this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
-    }, 10)
+    // setTimeout(() => {
+    //   this.setState({reload: "This is part is synchronous. Inside the async function after this render will be called"});
+    //   console.log("setTimeout setState");
+    //   this.setState({reload: "This is part is aslso synchronous. Inside the async function after this render will be called"});
+    // }, 10)
     var {id} = this.props.match.params;
     // var {profile} = this.props.profile;
     var {isFetching, movie, rateMovie, deleteMovieRating, profile, genre,likeGenre} = this.props;
@@ -258,7 +258,7 @@ class Genre extends React.Component {
         {
           movies.map(m => {
             return (
-              <div key={m.id}>
+              <div key={m.id} class="nt-home-featured">
                 <Link to={`/entity/${m.id}`}>
                   <img src={m.posterImage} alt="" />
                 </Link>
@@ -314,13 +314,13 @@ class Genre extends React.Component {
     window.location.href = window.location.href;
     window.location.href = window.location.href;
     window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
-    window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
+    // window.location.href = window.location.href;
   }
 }
 Genre.displayName = 'Genre';

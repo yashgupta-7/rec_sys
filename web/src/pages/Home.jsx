@@ -148,8 +148,8 @@ class Home extends React.Component {
           { _.compact(movies.featured['movies']).map(f => {
             return (
               // key={f.id}
-              <li > 
-                <Link to={`/entity/${f.id}`}>
+              <li >  
+                <Link to={isLoggedIn? `/entity/${f.id}` : ``}>
                   <img src={f.posterImage} alt="" />
                   <h5>
                     {f.title}
@@ -166,11 +166,30 @@ class Home extends React.Component {
             return (
               // key={f.id}
               <li > 
-                <Link to={`/entity/${f.id}`}>
+                <Link to={isLoggedIn? `/entity/${f.id}` : ``}>
                   <img src={f.posterImage} alt="" />
                   <h5>
                     {f.title}
                   </h5>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <h4 className="nt-home-header">Genres</h4>
+        <ul>
+          { _.compact(movies.featured['genres']).map(f => {
+            return (
+              // key={f.id}
+              <li > 
+                <Link to={isLoggedIn? `/genre/${f.name}`: ''}>
+                  {/* <img src={f.posterImage} alt="" /> */}
+                  {/* <div style="border: 1px solid black;"> */}
+                  <h5>
+                    {f.name}
+                  </h5>
+                  {/* </div> */}
                 </Link>
               </li>
             );

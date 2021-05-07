@@ -61,9 +61,9 @@ class Movie extends React.Component {
                   </p>
                 
         
-                    <p className="nt-box-row">
+                    {/* <p className="nt-box-row">
                       <strong>Year: </strong><span>{movie.released}</span>
-                    </p>
+                    </p> */}
                     <p className="nt-box-row">
                       <strong>Duration: </strong><span>{`${movie.duration} mins`}</span>
                     </p>
@@ -74,6 +74,10 @@ class Movie extends React.Component {
                     <p className="nt-box-row">
                       <strong>Directed By: </strong>
                       <span>{this.renderPeople(movie.directors)}</span>
+                    </p>
+                    <p className="nt-box-row">
+                      <strong>Written By: </strong>
+                      <span>{this.renderPeople(movie.writers)}</span>
                     </p>
                     <p className="nt-box-row">
                       <strong>Cast: </strong>
@@ -162,17 +166,27 @@ class Movie extends React.Component {
     return (
           movies.map((m,i) => {
             return (
-              <div className="nt-home-featured">
-              <li > 
               <span key={m.id}>
-                 <Link to={`/entity/${m.id}`}>
-                  <img className="nt-movie-poster" src={m.posterImage} alt="*" />
-                </Link>
-                  <Link to={`/entity/${m.id}`}>{m.title}</Link>
-                  {i < movies.length - 1 ? <span>, </span> : null}
+                <span className="nt-carousel-actor-name"><Link to={`/entity/${m.id}`}>
+                  <img className="nt-movie-smallposter" src={m.posterImage} alt="" />{m.title}</Link></span>
+                {/* <span> </span>  */}
+                {/* <span className="nt-carousel-actor-role">{m.title}</span> */}
+                <span></span>
+                {/* {i < movies.length - 1 ? <span>, </span> : null} */}
               </span>
-              </li > 
-              </div>
+              // // <div className="nt-home-featured">
+              // // <span>
+              // {/* <li >  */}
+              // <span key={m.id}>
+              //    <Link to={`/entity/${m.id}`}>
+              //    <span className="nt-carousel-actor-name"><img className="nt-movie-poster" src={m.posterImage} alt="*" /></span>
+              //   </Link>
+              //     <Link to={`/entity/${m.id}`}>{m.title}</Link>
+              //     {i < movies.length - 1 ? <span>, </span> : null}
+              // </span>
+              // {/* </li >  */}
+              // {/* </span> */}
+              // // </div>
             );
           }));
   }
